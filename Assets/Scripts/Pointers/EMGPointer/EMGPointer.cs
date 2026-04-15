@@ -251,6 +251,11 @@ public class EMGPointer : Pointer
         }
         return gestureConfidence;
     }
+
+    public Transform GetVirtualHandTransform()
+    {
+        return virtualHand != null ? virtualHand.transform : null;
+    }
 }
 
 public enum EMGPointerBehavior
