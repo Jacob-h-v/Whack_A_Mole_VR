@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 /*
 Implementation of the pointer abstract class to handle the EMG Pointer.
@@ -22,6 +23,9 @@ public class EMGPointer : Pointer
     [SerializeField] private bool recordMaximumEMG = true; // If true, records the maximum EMG value reached during the session.
     [SerializeField] private float maxEMG = 0.0f;
     [SerializeField][Range(0f, 1f)] private float emgThreshold = 0.3f; // Threshold above which the EMG signal is considered as a muscle activation (0-1).
+    [SerializeField] private bool followUltimateTracker = true;
+    [SerializeField] private float trackerSearchInterval = 1f;
+    [SerializeField] private string trackerSerialContains = "";
 
     private AIServerInterface aiServerInterface;
     private EMGClassifiedGestureManager emgClassifiedGestureManager;
@@ -29,6 +33,25 @@ public class EMGPointer : Pointer
     private string moleHoveringGesture = DEFAULT_GESTURE; // Current gesture of the mole being hovered over (only in Training mode).
     private string gestureConfidence = "Uncertain";
     private string thresholdState = "below";
+    private int trackerDeviceIndex = -1;
+    private float nextTrackerSearchTime;
+    private SteamVR_Behaviour_Pose steamVRPose;
+    private bool steamVRPoseWasEnabled;
+
+    private void Awake()
+    {
+        steamVRPose = GetComponent<SteamVR_Behaviour_Pose>();
+    }
+
+    private void OnEnable()
+    {
+        Application.onBeforeRender += OnBeforeRender;
+    }
+
+    private void OnDisable()
+    {
+        Application.onBeforeRender -= OnBeforeRender;
+    }
 
     void Update()
     {
@@ -50,6 +73,18 @@ public class EMGPointer : Pointer
     public override void Enable()
     {
         if (active) return;
+
+        if (followUltimateTracker)
+        {
+            SteamVR.Initialize();
+            ResolveTrackerDeviceIndex(force: true);
+            if (steamVRPose != null)
+            {
+                steamVRPoseWasEnabled = steamVRPose.enabled;
+                steamVRPose.enabled = false;
+            }
+        }
+
         if (laserMapper != null) laserMapper.GetComponentInChildren<Canvas>().enabled = false; //Disable visual components of laserMapper only for EMG pointer
         if (virtualHand != null) Destroy(virtualHand);
         if (virtualHandPrefab != null)
@@ -85,6 +120,11 @@ public class EMGPointer : Pointer
     public override void Disable()
     {
         if (!active) return;
+
+        if (steamVRPose != null)
+        {
+            steamVRPose.enabled = steamVRPoseWasEnabled;
+        }
 
         if (virtualHand != null)
         {
@@ -255,6 +295,127 @@ public class EMGPointer : Pointer
     public Transform GetVirtualHandTransform()
     {
         return virtualHand != null ? virtualHand.transform : null;
+    }
+
+    private void LateUpdate()
+    {
+        if (followUltimateTracker && active)
+        {
+            UpdateTrackerPoseOverride();
+        }
+    }
+
+    private void OnBeforeRender()
+    {
+        if (followUltimateTracker && active)
+        {
+            UpdateTrackerPoseOverride();
+        }
+    }
+
+    private void UpdateTrackerPoseOverride()
+    {
+        if (Time.unscaledTime >= nextTrackerSearchTime || trackerDeviceIndex < 0)
+        {
+            ResolveTrackerDeviceIndex(force: false);
+        }
+
+        if (trackerDeviceIndex < 0)
+        {
+            return;
+        }
+
+        SteamVR_Render render = SteamVR_Render.instance;
+        if (render == null || render.poses == null || trackerDeviceIndex >= render.poses.Length)
+        {
+            return;
+        }
+
+        TrackedDevicePose_t pose = render.poses[trackerDeviceIndex];
+        if (!pose.bDeviceIsConnected || !pose.bPoseIsValid)
+        {
+            return;
+        }
+
+        SteamVR_Utils.RigidTransform trackedPose = new SteamVR_Utils.RigidTransform(pose.mDeviceToAbsoluteTracking);
+
+        transform.position = trackedPose.pos;
+        transform.rotation = trackedPose.rot;
+
+        PositionUpdated();
+    }
+
+    private void ResolveTrackerDeviceIndex(bool force)
+    {
+        if (!force && Time.unscaledTime < nextTrackerSearchTime)
+        {
+            return;
+        }
+
+        nextTrackerSearchTime = Time.unscaledTime + trackerSearchInterval;
+
+        if (!SteamVR.active || OpenVR.System == null)
+        {
+            trackerDeviceIndex = -1;
+            return;
+        }
+
+        trackerDeviceIndex = FindUltimateOrFallbackTracker();
+    }
+
+    private int FindUltimateOrFallbackTracker()
+    {
+        CVRSystem system = OpenVR.System;
+        int fallbackTrackerIndex = -1;
+
+        for (uint i = 0; i < OpenVR.k_unMaxTrackedDeviceCount; i++)
+        {
+            if (!system.IsTrackedDeviceConnected(i))
+            {
+                continue;
+            }
+
+            ETrackedDeviceClass deviceClass = system.GetTrackedDeviceClass(i);
+            bool classCanBeTracker = deviceClass == ETrackedDeviceClass.GenericTracker || deviceClass == ETrackedDeviceClass.Controller;
+            if (!classCanBeTracker)
+            {
+                continue;
+            }
+
+            string serial = GetDeviceProperty(i, ETrackedDeviceProperty.Prop_SerialNumber_String);
+            string model = GetDeviceProperty(i, ETrackedDeviceProperty.Prop_ModelNumber_String);
+            string controllerType = GetDeviceProperty(i, ETrackedDeviceProperty.Prop_ControllerType_String);
+            string renderModel = GetDeviceProperty(i, ETrackedDeviceProperty.Prop_RenderModelName_String);
+            string searchable = (serial + " " + model + " " + controllerType + " " + renderModel).ToLowerInvariant();
+
+            if (!string.IsNullOrWhiteSpace(trackerSerialContains) && !serial.ToLowerInvariant().Contains(trackerSerialContains.ToLowerInvariant()))
+            {
+                continue;
+            }
+
+            bool looksLikeUltimateTracker = searchable.Contains("ultimate") || searchable.Contains("vive_tracker_ultimate");
+            if (looksLikeUltimateTracker)
+            {
+                return (int)i;
+            }
+
+            if (deviceClass == ETrackedDeviceClass.GenericTracker && fallbackTrackerIndex < 0)
+            {
+                fallbackTrackerIndex = (int)i;
+            }
+        }
+
+        return fallbackTrackerIndex;
+    }
+
+    private static string GetDeviceProperty(uint deviceIndex, ETrackedDeviceProperty property)
+    {
+        if (SteamVR.instance == null)
+        {
+            return string.Empty;
+        }
+
+        return SteamVR.instance.GetStringProperty(property, deviceIndex);
     }
 }
 
