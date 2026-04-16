@@ -405,3 +405,7 @@ healthchecksdb
 # TDK plugin files
 /Assets/Plugins/x86_64/TDK
 /Assets/Plugins/x86_64/TDK.meta
+Whack_A_Mole_VR.sln
+ProjectSettings/ProjectSettings.asset
+Assets/SteamVR_Resources/Resources/SteamVR_Settings.asset.meta
+Assets/SteamVR_Resources/Resources/SteamVR_Settings.asset
