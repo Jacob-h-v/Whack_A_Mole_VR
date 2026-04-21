@@ -7,7 +7,8 @@ using UnityEngine;
 public class Breakable : MonoBehaviour
 {
     [SerializeField] GameObject brokenObject;
-    private int objectIntactness = 100;
+    [SerializeField] Material glassMaterial;
+    [SerializeField]private int objectIntactness = 100;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
 
@@ -40,10 +41,10 @@ public class Breakable : MonoBehaviour
                 adjustmentPerTick = -10;
                 break;
             case "NoGrasp":
-                adjustmentPerTick = -10;
+                adjustmentPerTick = 0;
                 break;
             default:
-                adjustmentPerTick = -10;
+                adjustmentPerTick = 0;
                 break;
         }
         UpdatePartialBreakage();
@@ -66,7 +67,8 @@ public class Breakable : MonoBehaviour
         {
             // Adjust the intactness based on the current grasp adjustment amount
             objectIntactness += adjustmentPerTick;
-
+            objectIntactness = Mathf.Clamp(objectIntactness, 0, 100);
+            glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
             // Check if the object should break
             if (objectIntactness <= 0)
             {
