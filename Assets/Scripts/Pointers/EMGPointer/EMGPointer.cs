@@ -14,8 +14,8 @@ public class EMGPointer : Pointer
     private GameObject virtualHand;
 
     [SerializeField]
-    [Tooltip("Distance in front of the camera where the virtual hand will be placed.")]
-    private float handOffsetDistance = -0.35f; // Distance in front of the camera where the virtual hand will be placed.
+    [Tooltip("Local offset from tracker/controller pivot to the spawned virtual hand root.")]
+    private Vector3 virtualHandLocalOffset = new Vector3(0f, -0.45f, 0f);
 
     [SerializeField] private GameObject SteamVRVisualHand;
     [SerializeField] private EMGDataProcessor emgDataProcessor;
@@ -26,6 +26,8 @@ public class EMGPointer : Pointer
     [SerializeField] private bool followUltimateTracker = true;
     [SerializeField] private float trackerSearchInterval = 1f;
     [SerializeField] private string trackerSerialContains = "";
+    [SerializeField] private bool debugTrackerAndHandCoords = false;
+    [SerializeField] private float debugCoordsLogInterval = 0.2f;
 
     private AIServerInterface aiServerInterface;
     private EMGClassifiedGestureManager emgClassifiedGestureManager;
@@ -35,6 +37,7 @@ public class EMGPointer : Pointer
     private string thresholdState = "below";
     private int trackerDeviceIndex = -1;
     private float nextTrackerSearchTime;
+    private float nextDebugCoordsLogTime;
     private SteamVR_Behaviour_Pose steamVRPose;
     private bool steamVRPoseWasEnabled;
 
@@ -90,7 +93,7 @@ public class EMGPointer : Pointer
         if (virtualHandPrefab != null)
         {
             virtualHand = Instantiate(virtualHandPrefab, transform);
-            virtualHand.transform.localPosition = new Vector3(0f, handOffsetDistance, 0f); // adjust as needed
+            virtualHand.transform.localPosition = virtualHandLocalOffset;
             emgClassifiedGestureManager = virtualHand.GetComponent<EMGClassifiedGestureManager>();
 
             Transform visualStick = virtualHand.transform.Find("VisualStick");
@@ -341,6 +344,14 @@ public class EMGPointer : Pointer
 
         transform.position = trackedPose.pos;
         transform.rotation = trackedPose.rot;
+
+        if (debugTrackerAndHandCoords && Time.unscaledTime >= nextDebugCoordsLogTime)
+        {
+            nextDebugCoordsLogTime = Time.unscaledTime + debugCoordsLogInterval;
+            Vector3 trackerCoords = trackedPose.pos;
+            Vector3 virtualHandCoords = virtualHand != null ? virtualHand.transform.position : Vector3.zero;
+            Debug.Log($"[TrackerCoords] : {trackerCoords.x:F3},{trackerCoords.y:F3},{trackerCoords.z:F3}, Virtual Hand Coords : {virtualHandCoords.x:F3},{virtualHandCoords.y:F3},{virtualHandCoords.z:F3}");
+        }
 
         PositionUpdated();
     }
