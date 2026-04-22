@@ -59,6 +59,7 @@ public class InteractiveMole : Mole
 
     [SerializeField] private AudioClip enableSound;
     [SerializeField] private AudioClip popSound;
+    [SerializeField] private AudioClip failPopSound;
 
     [SerializeField] private GameObject hoverInfoContainer;
     [SerializeField] private HoverInfo[] hoverInfos;
@@ -74,6 +75,7 @@ public class InteractiveMole : Mole
     private Vector3 startLocalPosition;
     private AudioSource audioSource;
     private bool hoverInfoShouldBeShown;
+    private bool isFailPop;
 
     private void Awake()
     {
@@ -154,7 +156,11 @@ public class InteractiveMole : Mole
         showHoverInfo(false);
         StopIdleVisuals();
 
-        PlaySound(popSound);
+        bool playFailPop = isFailPop;
+        isFailPop = false;
+
+        AudioClip selectedPopSound = playFailPop && failPopSound != null ? failPopSound : popSound;
+        PlaySound(selectedPopSound);
 
         onMolePopEvent?.Invoke();
         onMolePopWithValidationEvent?.Invoke(GetValidationArg());
@@ -233,9 +239,22 @@ public class InteractiveMole : Mole
 
     private void PlaySound(AudioClip audioClip)
     {
-        if (!audioSource) return;
+        if (!audioSource || audioClip == null) return;
         audioSource.clip = audioClip;
         audioSource.Play();
+    }
+
+    public void FailPop()
+    {
+        RequestPop(isFail: true);
+    }
+
+    private void RequestPop(bool isFail)
+    {
+        if (state != States.Enabled && state != States.Enabling) return;
+
+        isFailPop = isFail;
+        Pop(transform.position); /*Dummy hit since there is no raycast to trigger pop*/
     }
 
     public void PlayAnimatorStateByName(string stateName)

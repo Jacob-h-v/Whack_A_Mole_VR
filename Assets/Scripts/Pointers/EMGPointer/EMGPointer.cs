@@ -211,6 +211,18 @@ public class EMGPointer : Pointer
         recordMaximumEMG = true;
     }
 
+    public float GetCurrentMvcRatio()
+    {
+        if (emgDataProcessor == null || maxEMG <= Mathf.Epsilon)
+        {
+            return 0f;
+        }
+
+        return Mathf.Clamp01((float)(emgDataProcessor.GetSmoothedAbsAverage() / maxEMG));
+    }
+
+    public float GetCurrentMvcPercent() => GetCurrentMvcRatio() * 100f;
+
     private bool IsAboveThreshold(float emgIntensity) => (emgIntensity >= (emgThreshold * maxEMG));
     
     public string getThresholdState()

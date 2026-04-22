@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing.Text;
 using UnityEngine;
 
 
@@ -16,7 +14,7 @@ public class Breakable : MonoBehaviour
     void Awake()
     {
         objectIntactness = 100;
-        UpdateGraspStatus("NoGrasp");
+        UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
     }
 
@@ -47,7 +45,7 @@ public class Breakable : MonoBehaviour
             case >=20f and <=60f:
                 adjustmentPerTick = 25;
                 break;
-            case <20f:
+            case <20f and >0f:
                 adjustmentPerTick = -10;
                 break;
             case <=0 or >100f:
