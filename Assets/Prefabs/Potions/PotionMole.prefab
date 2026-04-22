@@ -98,11 +98,52 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1018664272722485354, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -1018664272722485354, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
         type: 3}
       propertyPath: m_Name
-      value: IntactClassicPotion Variant
+      value: PotionMole
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424396828587804706, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4424396828587804706, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ab05959583f53274e824e90b38926a55, type: 2}
+    - target: {fileID: 7754171746062102885, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4711208715938537054, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
     - target: {fileID: 8632055958874330854, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -122,6 +163,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8849956934767531802, guid: ae6256c01b1c4084a81e1b79cd8d7d5e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -164,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e51ebace6cbce2e4fb0df9af31d0d7bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultVisibility: 0
+  defaultVisibility: 1
   immediateInteraction: 1
   onMoleSpawnEvent:
     m_PersistentCalls:
@@ -196,21 +242,6 @@ MonoBehaviour:
   enableSound: {fileID: 0}
   popSound: {fileID: 0}
   failPopSound: {fileID: 8300000, guid: b41873dfdb123404fafce83c4a49888d, type: 3}
-  onMoleFailPopEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 194831163467974425}
-        m_TargetAssemblyTypeName: Breakable, Assembly-CSharp
-        m_MethodName: BreakObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
   hoverInfoContainer: {fileID: 0}
   hoverInfos:
   - key: PalmarGrasp
