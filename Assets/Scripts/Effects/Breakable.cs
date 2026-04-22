@@ -8,7 +8,8 @@ public class Breakable : MonoBehaviour
 {
     [SerializeField] GameObject brokenObject;
     [SerializeField] Material glassMaterial;
-    [SerializeField]private int objectIntactness = 100;
+    [SerializeField] private int objectIntactness = 100;
+    [SerializeField] EMGPointer emgPointer;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
 
@@ -22,38 +23,45 @@ public class Breakable : MonoBehaviour
     public void BreakObject()
     {
         Instantiate(brokenObject, transform.position, transform.rotation);
-        Destroy(gameObject); //or disable it, if we need it to not be destroyed.
 
+        InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
+        if (interactiveMole != null)
+        {
+            interactiveMole.FailPop();
+        }
+        else
+        {
+            Destroy(gameObject); //or disable it, if we need it to not be destroyed.
+        }
+        
         // Call any logger functions we need here.
     }
 
-    public void UpdateGraspStatus(string graspStatus)
+    public void UpdateGraspStatus(float graspStatus)
     {
-        switch (graspStatus?.Trim())
+        switch (graspStatus)
         {
-            case "TightGrasp":
+            case >60f and <=100f:
                 adjustmentPerTick = -25;
                 break;
-            case "IdealGrasp":
+            case >=20f and <=60f:
                 adjustmentPerTick = 25;
                 break;
-            case "LooseGrasp":
+            case <20f:
                 adjustmentPerTick = -10;
                 break;
-            case "NoGrasp":
+            case <=0 or >100f:
                 adjustmentPerTick = 0;
                 break;
             default:
                 adjustmentPerTick = 0;
                 break;
         }
-        UpdatePartialBreakage();
-        UpdateAuraShader();
     }
 
     private void UpdatePartialBreakage()
     {
-        // Update shader here for partial breakage visual
+        glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
     }
 
     private void UpdateAuraShader()
@@ -65,10 +73,17 @@ public class Breakable : MonoBehaviour
     {
         while (objectIntactness > 0)
         {
+            if (emgPointer == null)
+            {
+                emgPointer = FindObjectOfType<EMGPointer>();
+            }
+            float mvcPercent = emgPointer != null ? emgPointer.GetCurrentMvcPercent() : 0f;
+            UpdateGraspStatus(mvcPercent);
+
             // Adjust the intactness based on the current grasp adjustment amount
             objectIntactness += adjustmentPerTick;
             objectIntactness = Mathf.Clamp(objectIntactness, 0, 100);
-            glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
+            UpdatePartialBreakage();
             // Check if the object should break
             if (objectIntactness <= 0)
             {
