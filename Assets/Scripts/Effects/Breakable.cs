@@ -27,10 +27,7 @@ public class Breakable : MonoBehaviour
         {
             interactiveMole.FailPop();
         }
-        else
-        {
             Destroy(gameObject); //or disable it, if we need it to not be destroyed.
-        }
         
         // Call any logger functions we need here.
     }
@@ -69,7 +66,7 @@ public class Breakable : MonoBehaviour
 
     private IEnumerator IntactnessAdjustmentLoop()
     {
-        while (objectIntactness > 0)
+        while (true)
         {
             if (emgPointer == null)
             {
