@@ -8,6 +8,7 @@ public class Breakable : MonoBehaviour
     [SerializeField] Material glassMaterial;
     [SerializeField] private int objectIntactness = 100;
     [SerializeField] EMGPointer emgPointer;
+    [SerializeField] private bool enableGraspStatusUpdates = false;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
 
@@ -54,6 +55,18 @@ public class Breakable : MonoBehaviour
         }
     }
 
+    public void SetGraspStatusUpdatesEnabled(bool enabled)
+    {
+        enableGraspStatusUpdates = enabled;
+        if (!enableGraspStatusUpdates)
+        {
+            adjustmentPerTick = 0;
+        }
+    }
+
+    public void EnableGraspStatusUpdates() => SetGraspStatusUpdatesEnabled(true);
+    public void DisableGraspStatusUpdates() => SetGraspStatusUpdatesEnabled(false);
+
     private void UpdatePartialBreakage()
     {
         glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
@@ -68,12 +81,24 @@ public class Breakable : MonoBehaviour
     {
         while (true)
         {
-            if (emgPointer == null)
+            if (enableGraspStatusUpdates)
             {
-                emgPointer = FindObjectOfType<EMGPointer>();
+                if (emgPointer == null)
+                {
+                    emgPointer = FindObjectOfType<EMGPointer>();
+                    if (emgPointer != null)
+                    {
+                        Debug.Log($"[Breakable:{gameObject.name}] Found EMGPointer by type: {emgPointer.gameObject.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[Breakable:{gameObject.name}] FindObjectOfType<EMGPointer>() failed. No active EMGPointer found in scene.");
+                    }
+                }
+
+                float mvcPercent = emgPointer != null ? emgPointer.GetCurrentMvcPercent() : 0f;
+                UpdateGraspStatus(mvcPercent);
             }
-            float mvcPercent = emgPointer != null ? emgPointer.GetCurrentMvcPercent() : 0f;
-            UpdateGraspStatus(mvcPercent);
 
             // Adjust the intactness based on the current grasp adjustment amount
             objectIntactness += adjustmentPerTick;

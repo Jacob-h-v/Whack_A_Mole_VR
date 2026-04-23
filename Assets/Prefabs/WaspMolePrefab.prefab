@@ -1482,6 +1482,7 @@ MonoBehaviour:
   animatorLayerIndex: 0
   enableSound: {fileID: 0}
   popSound: {fileID: 8300000, guid: 3ac627a74a6af2043b4cfe0ecb0e1405, type: 3}
+  failPopSound: {fileID: 0}
   hoverInfoContainer: {fileID: 2451329133447959330}
   hoverInfos:
   - key: PalmarGrasp

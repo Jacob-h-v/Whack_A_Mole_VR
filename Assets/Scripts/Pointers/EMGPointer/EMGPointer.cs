@@ -147,6 +147,7 @@ public class EMGPointer : Pointer
 
     private void OnHoverEnter(Mole mole)
     {
+        Debug.Log($"[EMGPointer:{gameObject.name}] Hover enter detected on mole '{mole.gameObject.name}' (id={mole.GetId()}, state={mole.GetState()}).");
         mole.OnHoverEnter();
         dwellStartTimer = Time.time;
         if (mole.GetState() == Mole.States.Enabled)
@@ -362,7 +363,7 @@ public class EMGPointer : Pointer
             nextDebugCoordsLogTime = Time.unscaledTime + debugCoordsLogInterval;
             Vector3 trackerCoords = trackedPose.pos;
             Vector3 virtualHandCoords = virtualHand != null ? virtualHand.transform.position : Vector3.zero;
-            Debug.Log($"[TrackerCoords] : {trackerCoords.x:F3},{trackerCoords.y:F3},{trackerCoords.z:F3}, Virtual Hand Coords : {virtualHandCoords.x:F3},{virtualHandCoords.y:F3},{virtualHandCoords.z:F3}");
+            //Debug.Log($"[TrackerCoords] : {trackerCoords.x:F3},{trackerCoords.y:F3},{trackerCoords.z:F3}, Virtual Hand Coords : {virtualHandCoords.x:F3},{virtualHandCoords.y:F3},{virtualHandCoords.z:F3}");
         }
 
         PositionUpdated();

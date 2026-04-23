@@ -34,6 +34,9 @@ public class InteractiveMole : Mole
     [Tooltip("UnityEvent invoked when the mole leaves hover state.")]
     [SerializeField] private UnityEvent onMoleHoverLeaveEvent = new UnityEvent();
 
+    public UnityEvent OnMoleHoverEnterEvent => onMoleHoverEnterEvent;
+    public UnityEvent OnMoleHoverLeaveEvent => onMoleHoverLeaveEvent;
+
     [Tooltip("UnityEvent invoked when the mole starts popping.")]
     [SerializeField] private UnityEvent onMolePopEvent = new UnityEvent();
 
