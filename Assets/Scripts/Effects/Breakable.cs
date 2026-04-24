@@ -9,6 +9,10 @@ public class Breakable : MonoBehaviour
     [SerializeField] private int objectIntactness = 100;
     [SerializeField] EMGPointer emgPointer;
     [SerializeField] private bool enableGraspStatusUpdates = false;
+    [SerializeField] private bool enableAuras = false;
+    [SerializeField] private GameObject auraGood;
+    [SerializeField] private GameObject auraBadLow;
+    [SerializeField] private GameObject auraBadHigh;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
 
@@ -37,20 +41,50 @@ public class Breakable : MonoBehaviour
     {
         switch (graspStatus)
         {
-            case >60f and <=100f:
+            case >60f and <=100f: // Too tight
                 adjustmentPerTick = -25;
+                if(enableAuras)
+                {
+                    auraGood.SetActive(false);
+                    auraBadLow.SetActive(false);
+                    auraBadHigh.SetActive(true);
+                }
                 break;
-            case >=20f and <=60f:
+            case >=20f and <=60f: // Ideal grasp strength
                 adjustmentPerTick = 25;
+                if(enableAuras)
+                {
+                    auraGood.SetActive(true);
+                    auraBadLow.SetActive(false);
+                    auraBadHigh.SetActive(false);
+                }
                 break;
-            case <20f and >0f:
+            case <20f and >0f: // Too Loose
                 adjustmentPerTick = -10;
+                if(enableAuras)
+                {
+                    auraGood.SetActive(false);
+                    auraBadLow.SetActive(true);
+                    auraBadHigh.SetActive(false);
+                }
                 break;
-            case <=0 or >100f:
+            case <=0 or >100f: // No signal or invalid value
                 adjustmentPerTick = 0;
+                if(enableAuras)
+                {
+                    auraGood.SetActive(false);
+                    auraBadLow.SetActive(false);
+                    auraBadHigh.SetActive(false);
+                }
                 break;
             default:
                 adjustmentPerTick = 0;
+                if(enableAuras)
+                {
+                    auraGood.SetActive(false);
+                    auraBadLow.SetActive(false);
+                    auraBadHigh.SetActive(false);
+                }
                 break;
         }
     }
