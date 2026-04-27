@@ -491,7 +491,19 @@ MonoBehaviour:
   immediateInteraction: 1
   onMoleSpawnEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 194831163467974425}
+        m_TargetAssemblyTypeName: Breakable, Assembly-CSharp
+        m_MethodName: DisableGraspStatusUpdates
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   onMoleIdleEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -809,7 +821,7 @@ PrefabInstance:
     - target: {fileID: 3600230948079022790, guid: 19f730f632c0ac84791624d0c0132b0c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4970809155386585993, guid: 19f730f632c0ac84791624d0c0132b0c,
         type: 3}

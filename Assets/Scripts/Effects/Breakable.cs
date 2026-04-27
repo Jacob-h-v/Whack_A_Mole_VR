@@ -100,6 +100,7 @@ public class Breakable : MonoBehaviour
 
     public void EnableGraspStatusUpdates() => SetGraspStatusUpdatesEnabled(true);
     public void DisableGraspStatusUpdates() => SetGraspStatusUpdatesEnabled(false);
+    public bool AreGraspStatusUpdatesEnabled() => enableGraspStatusUpdates;
 
     private void UpdatePartialBreakage()
     {
