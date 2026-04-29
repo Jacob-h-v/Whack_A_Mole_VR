@@ -57,7 +57,7 @@ public abstract class Pointer : MonoBehaviour
     protected float shotCooldown;
 
     [SerializeField]
-    protected float dwellTime = 2f;
+    protected float dwellTime = 10f;
 
     [SerializeField]
     protected LaserCursor cursor;

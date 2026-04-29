@@ -13,11 +13,17 @@ public class Breakable : MonoBehaviour
     [SerializeField] private GameObject auraGood;
     [SerializeField] private GameObject auraBadLow;
     [SerializeField] private GameObject auraBadHigh;
+    [SerializeField] private AudioClip crackingSound;
+    [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
+    private AudioSource audioSource;
+    private int lastIntactnessWhenCrackPlayed = 100;
+    private float nextCrackAllowedTime = 0f;
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         objectIntactness = 100;
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
@@ -112,6 +118,26 @@ public class Breakable : MonoBehaviour
         // Update the aura shader here based on grasp status
     }
 
+    private void PlayCrackingSound()
+    {
+        if (audioSource == null || crackingSound == null)
+        {
+            return;
+        }
+
+        if (Time.time < nextCrackAllowedTime)
+        {
+            return;
+        }
+
+        float volumeScale = 1f - (objectIntactness / 100f);
+        float scaledVolume = Mathf.Lerp(0.1f, crackVolume, volumeScale);
+        audioSource.PlayOneShot(crackingSound, scaledVolume);
+        
+        nextCrackAllowedTime = Time.time + crackingSound.length;
+        lastIntactnessWhenCrackPlayed = objectIntactness;
+    }
+
     private IEnumerator IntactnessAdjustmentLoop()
     {
         while (true)
@@ -139,6 +165,13 @@ public class Breakable : MonoBehaviour
             objectIntactness += adjustmentPerTick;
             objectIntactness = Mathf.Clamp(objectIntactness, 0, 100);
             UpdatePartialBreakage();
+
+            if (enableGraspStatusUpdates && objectIntactness < lastIntactnessWhenCrackPlayed - 20 && Time.time >= nextCrackAllowedTime)
+            {
+                PlayCrackingSound();
+                nextCrackAllowedTime = Time.time + 1f; // Set the next allowed crack sound time
+            }
+
             // Check if the object should break
             if (objectIntactness <= 0)
             {

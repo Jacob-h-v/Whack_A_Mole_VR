@@ -178,18 +178,6 @@ public class EMGPointer : Pointer
 
     private void OnHoverStay(Mole mole)
     {
-        Breakable breakable = mole.GetComponent<Breakable>();
-        if (breakable != null && breakable.AreGraspStatusUpdatesEnabled())
-        {
-            float mvcPercent = GetCurrentMvcPercent();
-            if (mvcPercent < 20f || mvcPercent > 60f)
-            {
-                mole.SetLoadingValue(0);
-                dwellStartTimer = Time.time;
-                return;
-            }
-        }
-
         if (mole.checkShootingValidity(GetCurrentGesture().ToString()))
         {
             // If the EMG signal is below the threshold, reset the dwell timer.
@@ -235,6 +223,8 @@ public class EMGPointer : Pointer
     }
 
     public float GetCurrentMvcPercent() => GetCurrentMvcRatio() * 100f;
+
+    public float GetMaxEMG() => maxEMG;
 
     private bool IsAboveThreshold(float emgIntensity) => (emgIntensity >= (emgThreshold * maxEMG));
     
