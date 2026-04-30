@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class Breakable : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] GameObject brokenObject;
     [SerializeField] Material glassMaterial;
-    [SerializeField] private int objectIntactness = 100;
-    [SerializeField] EMGPointer emgPointer;
-    [SerializeField] private bool enableGraspStatusUpdates = false;
-    [SerializeField] private bool enableAuras = false;
     [SerializeField] private GameObject auraGood;
     [SerializeField] private GameObject auraBadLow;
     [SerializeField] private GameObject auraBadHigh;
+    [SerializeField] EMGPointer emgPointer;
     [SerializeField] private AudioClip crackingSound;
+
+    [Header("DebugIndicators")]
+    [SerializeField] private int objectIntactness = 100;
+
+    [Header("Settings")]
+    [SerializeField] private bool enableGraspStatusUpdates = false;
+    [SerializeField] private bool enableAuras = false;
     [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
+    [SerializeField] private bool enableWobbles = true;
+    [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
+    [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
+
+    private Quaternion wobbleTargetAngle;
+    private Quaternion baseObjectAngle;
+    private bool wobbleActive = false;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
     private AudioSource audioSource;
@@ -23,10 +35,19 @@ public class Breakable : MonoBehaviour
 
     void Awake()
     {
+        baseObjectAngle = Quaternion.Euler(Vector3.forward * 0 * 0);
         audioSource = GetComponent<AudioSource>();
         objectIntactness = 100;
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
+    }
+
+    void Update()
+    {
+        if(wobbleActive)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, wobbleTargetAngle, Time.deltaTime);
+        }
     }
 
     public void BreakObject()
@@ -55,6 +76,10 @@ public class Breakable : MonoBehaviour
                     auraBadLow.SetActive(false);
                     auraBadHigh.SetActive(true);
                 }
+                if(enableWobbles)
+                {
+                    EnableObjectWobble(false);
+                }
                 break;
             case >=20f and <=60f: // Ideal grasp strength
                 adjustmentPerTick = 25;
@@ -63,6 +88,10 @@ public class Breakable : MonoBehaviour
                     auraGood.SetActive(true);
                     auraBadLow.SetActive(false);
                     auraBadHigh.SetActive(false);
+                }
+                if(enableWobbles)
+                {
+                    EnableObjectWobble(false);
                 }
                 break;
             case <20f and >0f: // Too Loose
@@ -73,6 +102,10 @@ public class Breakable : MonoBehaviour
                     auraBadLow.SetActive(true);
                     auraBadHigh.SetActive(false);
                 }
+                if(enableWobbles)
+                {
+                    EnableObjectWobble(true);
+                }
                 break;
             case <=0 or >100f: // No signal or invalid value
                 adjustmentPerTick = 0;
@@ -82,6 +115,10 @@ public class Breakable : MonoBehaviour
                     auraBadLow.SetActive(false);
                     auraBadHigh.SetActive(false);
                 }
+                if(enableWobbles)
+                {
+                    EnableObjectWobble(false);
+                }
                 break;
             default:
                 adjustmentPerTick = 0;
@@ -90,6 +127,10 @@ public class Breakable : MonoBehaviour
                     auraGood.SetActive(false);
                     auraBadLow.SetActive(false);
                     auraBadHigh.SetActive(false);
+                }
+                if(enableWobbles)
+                {
+                    EnableObjectWobble(false);
                 }
                 break;
         }
@@ -180,6 +221,22 @@ public class Breakable : MonoBehaviour
             }
 
             yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
+        }
+    }
+
+    private void EnableObjectWobble(bool Enabled) //Calculates a randomized curve and intensity, which is used to Lerp the object's rotation for a wobble effect (see Update()).
+    {
+        if(Enabled)
+        {
+            float intensity = Random.Range(0.1f, maxWobble);
+            float curve = Mathf.Sin(Random.Range(0, Mathf.PI * 2));
+            wobbleTargetAngle = Quaternion.Euler(Vector3.forward * curve * intensity);
+            wobbleActive = true;
+        }
+        else
+        {
+            wobbleActive = false;
+            transform.rotation = Quaternion.Lerp(transform.rotation, baseObjectAngle, Time.deltaTime);
         }
     }
 
