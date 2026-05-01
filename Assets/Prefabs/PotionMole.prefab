@@ -525,7 +525,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 1
+        m_CallState: 0
       - m_Target: {fileID: 194831163467974425}
         m_TargetAssemblyTypeName: Breakable, Assembly-CSharp
         m_MethodName: EnableGraspStatusUpdates
@@ -595,15 +595,18 @@ MonoBehaviour:
     type: 3}
   glassMaterial: {fileID: -876546973899608171, guid: 250d6f568f8cb984eacf485003ad19c0,
     type: 3}
-  objectIntactness: 100
-  emgPointer: {fileID: 0}
-  enableGraspStatusUpdates: 1
-  enableAuras: 1
   auraGood: {fileID: 4254199885747006771}
   auraBadLow: {fileID: 7143578224904355208}
   auraBadHigh: {fileID: 3334856401176447997}
+  emgPointer: {fileID: 0}
   crackingSound: {fileID: 8300000, guid: c225e7bc6bc5d1d45a21813187271d96, type: 3}
+  objectIntactness: 100
+  enableGraspStatusUpdates: 1
+  enableAuras: 1
   crackVolume: 1
+  enableWobbles: 1
+  wobbleDelay: 0.5
+  maxWobble: 10
 --- !u!65 &6331668368080917688
 BoxCollider:
   m_ObjectHideFlags: 0
