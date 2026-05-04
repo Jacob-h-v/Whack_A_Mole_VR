@@ -590,7 +590,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 670398899}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fdcffeaedd1d41d4097e73c1aec41c74,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 953307629}
   m_SourcePrefab: {fileID: 100100000, guid: fdcffeaedd1d41d4097e73c1aec41c74, type: 3}
 --- !u!4 &953307627 stripped
 Transform:
@@ -598,6 +602,34 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 953307626}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &953307628 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: fdcffeaedd1d41d4097e73c1aec41c74,
+    type: 3}
+  m_PrefabInstance: {fileID: 953307626}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &953307629
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953307628}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4579454407841743219, guid: fdcffeaedd1d41d4097e73c1aec41c74, type: 3}
 --- !u!1001 &961940912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2240,6 +2272,7 @@ MonoBehaviour:
   animatorLayerIndex: 0
   enableSound: {fileID: 0}
   popSound: {fileID: 0}
+  failPopSound: {fileID: 0}
   hoverInfoContainer: {fileID: 2451329132491555386}
   hoverInfos:
   - key: PalmarGrasp
@@ -2248,7 +2281,6 @@ MonoBehaviour:
     value: {fileID: 4367289920540879805}
   - key: WristExtension
     value: {fileID: 8251829351078763550}
-  autoSnapOnPop: 0
 --- !u!23 &4507573221257769646
 MeshRenderer:
   m_ObjectHideFlags: 0
