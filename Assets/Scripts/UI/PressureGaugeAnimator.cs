@@ -29,15 +29,18 @@ public class PressureGaugeAnimator : MonoBehaviour
         // needleTransform.eulerAngles = new Vector3(0f, 0f, zRotation);
         UpdateCurrentAndMaxMVC();
 
-        float safeMvc = Mathf.Max(mvc, 0.0001f);
-        float mvcNormalized = currentPercentMVC / safeMvc;
+        //float safeMvc = Mathf.Max(mvc, 0.0001f);
+        //float mvcNormalized = currentPercentMVC / safeMvc;
 
-        float zRotation = Mathf.Clamp(
-            zeroMVCAngle - mvcNormalized * (zeroMVCAngle - maxMVCAngle),
-            -135f,
-            135f
-        );
+        //float zRotation = Mathf.Clamp(
+        //    zeroMVCAngle - mvcNormalized * (zeroMVCAngle - maxMVCAngle),
+        //    -135f,
+        //    135f
+        //);
 
+        //needleTransform.localRotation = Quaternion.Euler(0f, 0f, zRotation);
+        float clampedPercent = Mathf.Clamp(currentPercentMVC, 0f, 100f);
+        float zRotation = Mathf.Lerp(zeroMVCAngle, maxMVCAngle, clampedPercent / 100f);
         needleTransform.localRotation = Quaternion.Euler(0f, 0f, zRotation);
     }
 
