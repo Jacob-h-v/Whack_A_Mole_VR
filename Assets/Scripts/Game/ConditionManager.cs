@@ -7,6 +7,7 @@ public class ConditionManager : MonoBehaviour
     [Header("References")]
     [SerializeField] GameObject pressureGauge;
     [SerializeField] Breakable breakableScript;
+    [SerializeField] Material glassMaterial;
 
     [Header("Condition Overview")]
     [SerializeField] bool baselineCondition = false;
@@ -14,6 +15,30 @@ public class ConditionManager : MonoBehaviour
     [SerializeField] bool lossAversionCondition = false;
     [SerializeField] bool anchoringCondition = false;
     [SerializeField] bool debugDevCondition = false;
+
+    void Start()
+    {
+        if (baselineCondition)
+        {
+            SetBaselineCondition();
+        }
+        if(framingCondition)
+        {
+            SetFramingCondition();
+        }
+        if(lossAversionCondition)
+        {
+            SetLossAversionCondition();
+        }
+        if(anchoringCondition)
+        {
+            SetAnchoringCondition();
+        }
+        if(debugDevCondition)
+        {
+            SetDebugDevCondition();
+        }
+    }
 
     public void SetBaselineCondition() // Condition 0
     {
@@ -77,22 +102,27 @@ public class ConditionManager : MonoBehaviour
             case 1: // Framing Condition
                 pressureGauge.SetActive(false);
                 breakableScript.SetBreakageActive(false);
+                glassMaterial.SetColor("_VialColor", new Color(231, 213, 66, 210));
                 break;
             case 2: // Loss Aversion Condition
                 pressureGauge.SetActive(false);
                 breakableScript.SetBreakageActive(true);
+                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
                 break;
             case 3: // Anchoring Condition
                 pressureGauge.SetActive(true);
                 breakableScript.SetBreakageActive(false);
+                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
                 break;
             case 4: // Debug/Dev Condition
                 pressureGauge.SetActive(true);
                 breakableScript.SetBreakageActive(true);
+                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
                 break;
             default:
                 pressureGauge.SetActive(true);
                 breakableScript.SetBreakageActive(true);
+                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
                 break;
         }
     }
