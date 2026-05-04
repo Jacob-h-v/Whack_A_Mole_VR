@@ -93,6 +93,7 @@ public class ConditionManager : MonoBehaviour
 
     private void UpdateConditionEnvironment(int condition)
     {
+        GetAssetsUpdate();
         switch (condition)
         {
             case 0: // Baseline Condition
@@ -124,6 +125,33 @@ public class ConditionManager : MonoBehaviour
                 breakableScript.SetBreakageActive(true);
                 glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
                 break;
+        }
+    }
+
+    private void GetAssetsUpdate()
+    {
+        pressureGauge = GameObject.Find("PressureGauge");
+
+        if (pressureGauge == null)
+        {
+            Debug.LogWarning("PressureGauge not found in scene.");
+        }
+
+        GameObject potionMole = GameObject.Find("PotionMole");
+
+        if (potionMole != null)
+        {
+            breakableScript = potionMole.GetComponent<Breakable>();
+
+            if (breakableScript == null)
+            {
+                Debug.LogWarning("Breakable component not found on PotionMole.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("PotionMole not found in scene.");
+            breakableScript = null;
         }
     }
 }
