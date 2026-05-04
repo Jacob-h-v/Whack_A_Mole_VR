@@ -711,12 +711,13 @@ MonoBehaviour:
   crackingSound: {fileID: 8300000, guid: c225e7bc6bc5d1d45a21813187271d96, type: 3}
   objectIntactness: 100
   enableGraspStatusUpdates: 1
-  enableAuras: 1
-  crackVolume: 1
+  enableAuras: 0
+  enableBreakage: 0
   enableWobbles: 1
-  wobbleDelay: 0.5
-  maxWobble: 10
-  enableBreakage: 1
+  crackVolume: 1
+  wobbleDelay: 0.21
+  maxWobble: 60
+  spawnGracePeriod: 0.3
 --- !u!65 &6331668368080917688
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -34,6 +34,7 @@ public class Breakable : MonoBehaviour
     private AudioSource audioSource;
     private int lastIntactnessWhenCrackPlayed = 100;
     private float nextCrackAllowedTime = 0f;
+    private float spawnGraceEndTime = 0f;
 
     public void SetBreakageActive(bool active)
     {
@@ -45,6 +46,8 @@ public class Breakable : MonoBehaviour
         baseObjectAngle = Quaternion.Euler(Vector3.forward * 0 * 0);
         audioSource = GetComponent<AudioSource>();
         objectIntactness = 100;
+        spawnGraceEndTime = Time.time + spawnGracePeriod;
+        glassMaterial.SetFloat("_CrackedAmount", 0f);
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
     }
@@ -202,6 +205,13 @@ public class Breakable : MonoBehaviour
 
         while (true)
         {
+            if (Time.time < spawnGraceEndTime)
+            {
+                objectIntactness = 100;
+                yield return null;
+                continue;
+            }
+
             if (enableGraspStatusUpdates) 
             {
                 if (emgPointer == null)
