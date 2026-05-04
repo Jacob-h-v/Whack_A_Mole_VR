@@ -24,6 +24,7 @@ public class Breakable : MonoBehaviour
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
     [SerializeField] bool enableBreakage = false;
+    [SerializeField] [Range(0f, 1f)] private float spawnGracePeriod = 0.3f;
 
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
@@ -33,6 +34,7 @@ public class Breakable : MonoBehaviour
     private AudioSource audioSource;
     private int lastIntactnessWhenCrackPlayed = 100;
     private float nextCrackAllowedTime = 0f;
+    private float spawnTime;
 
     public void SetBreakageActive(bool active)
     {
@@ -43,6 +45,7 @@ public class Breakable : MonoBehaviour
     {
         baseObjectAngle = Quaternion.Euler(Vector3.forward * 0 * 0);
         audioSource = GetComponent<AudioSource>();
+        spawnTime = Time.time;
         objectIntactness = 100;
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
@@ -190,6 +193,21 @@ public class Breakable : MonoBehaviour
     {
         while (true)
         {
+            if (Time.time - spawnTime < spawnGracePeriod)
+            {
+                objectIntactness = 100;
+                lastIntactnessWhenCrackPlayed = objectIntactness;
+
+                if (enableBreakage)
+                {
+                    UpdatePartialBreakage();
+                    float remainingGraceTime = Mathf.Max(0f, spawnGracePeriod - (Time.time - spawnTime));
+                    yield return new WaitForSeconds(remainingGraceTime);
+                }
+
+                continue;
+            }
+
             if (enableGraspStatusUpdates) 
             {
                 if (emgPointer == null)
