@@ -23,6 +23,7 @@ public class Breakable : MonoBehaviour
     [SerializeField] private bool enableWobbles = true;
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
+    [SerializeField] bool enableBreakage = false;
 
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
@@ -32,6 +33,11 @@ public class Breakable : MonoBehaviour
     private AudioSource audioSource;
     private int lastIntactnessWhenCrackPlayed = 100;
     private float nextCrackAllowedTime = 0f;
+
+    public void SetBreakageActive(bool active)
+    {
+        enableBreakage = active;
+    }
 
     void Awake()
     {
@@ -149,6 +155,7 @@ public class Breakable : MonoBehaviour
     public void DisableGraspStatusUpdates() => SetGraspStatusUpdatesEnabled(false);
     public bool AreGraspStatusUpdatesEnabled() => enableGraspStatusUpdates;
 
+
     private void UpdatePartialBreakage()
     {
         glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
@@ -183,7 +190,7 @@ public class Breakable : MonoBehaviour
     {
         while (true)
         {
-            if (enableGraspStatusUpdates)
+            if (enableGraspStatusUpdates) 
             {
                 if (emgPointer == null)
                 {
@@ -205,23 +212,28 @@ public class Breakable : MonoBehaviour
             // Adjust the intactness based on the current grasp adjustment amount
             objectIntactness += adjustmentPerTick;
             objectIntactness = Mathf.Clamp(objectIntactness, 0, 100);
-            UpdatePartialBreakage();
 
-            if (enableGraspStatusUpdates && objectIntactness < lastIntactnessWhenCrackPlayed - 20 && Time.time >= nextCrackAllowedTime)
+            if (enableBreakage)
             {
-                PlayCrackingSound();
-                nextCrackAllowedTime = Time.time + 1f; // Set the next allowed crack sound time
-            }
+                UpdatePartialBreakage();
 
-            // Check if the object should break
-            if (objectIntactness <= 0)
-            {
-                BreakObject();
-                yield break; // Exit the coroutine after breaking the object
-            }
+                if (enableGraspStatusUpdates && objectIntactness < lastIntactnessWhenCrackPlayed - 20 && Time.time >= nextCrackAllowedTime)
+                {
+                    PlayCrackingSound();
+                    nextCrackAllowedTime = Time.time + 1f; // Set the next allowed crack sound time
+                }
 
-            yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
+                // Check if the object should break
+                if (objectIntactness <= 0)
+                {
+                    BreakObject();
+                    yield break; // Exit the coroutine after breaking the object
+                }
+
+                yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
+            }
         }
+            
     }
 
     private void EnableObjectWobble(bool Enabled) //Calculates a randomized curve and intensity, which is used to Lerp the object's rotation for a wobble effect (see Update()).
