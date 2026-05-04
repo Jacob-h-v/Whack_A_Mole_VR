@@ -4,154 +4,102 @@ using UnityEngine;
 
 public class ConditionManager : MonoBehaviour
 {
+    private enum ConditionType
+    {
+        Baseline,
+        Framing,
+        LossAversion,
+        Anchoring,
+        Debug
+    }
+
+    private Color materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
+
     [Header("References")]
     [SerializeField] GameObject pressureGauge;
-    [SerializeField] Breakable breakableScript;
-    [SerializeField] Material glassMaterial;
 
     [Header("Condition Overview")]
-    [SerializeField] bool baselineCondition = false;
-    [SerializeField] bool framingCondition = false;
-    [SerializeField] bool lossAversionCondition = false;
-    [SerializeField] bool anchoringCondition = false;
-    [SerializeField] bool debugDevCondition = false;
+    [SerializeField] ConditionType condition;
+
+    private bool conditionManagerBreakageEnabled = false; //inspector?
+
+    public bool GetBreakageEnableState()
+    {
+        bool breakageState = conditionManagerBreakageEnabled;
+        return breakageState;
+    }
+
+    public Color GetMaterialColor()
+    {
+        Color color = materialColor;
+        return color;
+    }
 
     void Start()
     {
-        if (baselineCondition)
-        {
-            SetBaselineCondition();
-        }
-        if(framingCondition)
-        {
-            SetFramingCondition();
-        }
-        if(lossAversionCondition)
-        {
-            SetLossAversionCondition();
-        }
-        if(anchoringCondition)
-        {
-            SetAnchoringCondition();
-        }
-        if(debugDevCondition)
-        {
-            SetDebugDevCondition();
-        }
+        UpdateConditionEnvironment((int)condition);
     }
 
-    public void SetBaselineCondition() // Condition 0
+    public void SetBaselineCondition() // Condition 0, Baseline
     {
-        baselineCondition = true;
-        framingCondition = false;
-        lossAversionCondition = false;
-        anchoringCondition = false;
-        debugDevCondition = false;
         UpdateConditionEnvironment(0);
     }
 
-    public void SetFramingCondition() // Condition 1
+    public void SetFramingCondition() // Condition 1, Framing
     {
-        baselineCondition = false;
-        framingCondition = true;
-        lossAversionCondition = false;
-        anchoringCondition = false;
-        debugDevCondition = false;
         UpdateConditionEnvironment(1);
     }
 
-    public void SetLossAversionCondition() // Condition 2
+    public void SetLossAversionCondition() // Condition 2, Loss Aversion
     {
-        baselineCondition = false;
-        framingCondition = false;
-        lossAversionCondition = true;
-        anchoringCondition = false;
-        debugDevCondition = false;
         UpdateConditionEnvironment(2);
     }
 
-    public void SetAnchoringCondition() // Condition 3
+    public void SetAnchoringCondition() // Condition 3, Anchoring
     {
-        baselineCondition = false;
-        framingCondition = false;
-        lossAversionCondition = false;
-        anchoringCondition = true;
-        debugDevCondition = false;
         UpdateConditionEnvironment(3);
     }
 
-    public void SetDebugDevCondition() // Condition 4
+    public void SetDebugDevCondition() // Condition 4, Debug/Dev
     {
-        baselineCondition = false;
-        framingCondition = false;
-        lossAversionCondition = false;
-        anchoringCondition = false;
-        debugDevCondition = true;
         UpdateConditionEnvironment(4);
 
     }
 
     private void UpdateConditionEnvironment(int condition)
     {
-        GetAssetsUpdate();
         switch (condition)
         {
             case 0: // Baseline Condition
                 pressureGauge.SetActive(false);
-                breakableScript.SetBreakageActive(false);
+                conditionManagerBreakageEnabled = false;
+                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 1: // Framing Condition
                 pressureGauge.SetActive(false);
-                breakableScript.SetBreakageActive(false);
-                glassMaterial.SetColor("_VialColor", new Color(231, 213, 66, 210));
+                conditionManagerBreakageEnabled = false;
+                materialColor = new Color(231f/255f, 213f/255f, 66f/255f, 210f/255f);
                 break;
             case 2: // Loss Aversion Condition
                 pressureGauge.SetActive(false);
-                breakableScript.SetBreakageActive(true);
-                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
+                conditionManagerBreakageEnabled = true;
+                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 3: // Anchoring Condition
                 pressureGauge.SetActive(true);
-                breakableScript.SetBreakageActive(false);
-                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
+                conditionManagerBreakageEnabled = false;
+                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 4: // Debug/Dev Condition
                 pressureGauge.SetActive(true);
-                breakableScript.SetBreakageActive(true);
-                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
+                conditionManagerBreakageEnabled = true;
+                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             default:
                 pressureGauge.SetActive(true);
-                breakableScript.SetBreakageActive(true);
-                glassMaterial.SetColor("_VialColor", new Color(187, 226, 206, 210));
+                conditionManagerBreakageEnabled = true;
+                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
-        }
-    }
-
-    private void GetAssetsUpdate()
-    {
-        pressureGauge = GameObject.Find("PressureGauge");
-
-        if (pressureGauge == null)
-        {
-            Debug.LogWarning("PressureGauge not found in scene.");
-        }
-
-        GameObject potionMole = GameObject.Find("PotionMole");
-
-        if (potionMole != null)
-        {
-            breakableScript = potionMole.GetComponent<Breakable>();
-
-            if (breakableScript == null)
-            {
-                Debug.LogWarning("Breakable component not found on PotionMole.");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("PotionMole not found in scene.");
-            breakableScript = null;
         }
     }
 }

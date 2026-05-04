@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Breakable : MonoBehaviour
 {
+    private ConditionManager conditionManager;
+
     [Header("References")]
-    [SerializeField] GameObject brokenObject;
-    [SerializeField] Material glassMaterial;
+    [SerializeField] private GameObject brokenObject;
+    [SerializeField] private Material glassMaterial;
     [SerializeField] private GameObject auraGood;
     [SerializeField] private GameObject auraBadLow;
     [SerializeField] private GameObject auraBadHigh;
-    [SerializeField] EMGPointer emgPointer;
+    [SerializeField] private EMGPointer emgPointer;
     [SerializeField] private AudioClip crackingSound;
+    
 
     [Header("DebugIndicators")]
     [SerializeField] private int objectIntactness = 100;
@@ -19,7 +22,6 @@ public class Breakable : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool enableGraspStatusUpdates = false;
     [SerializeField] private bool enableAuras = false;
-    [SerializeField] private bool enableBreakage = false;
     [SerializeField] private bool enableWobbles = true;
     [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
@@ -35,14 +37,24 @@ public class Breakable : MonoBehaviour
     private int lastIntactnessWhenCrackPlayed = 100;
     private float nextCrackAllowedTime = 0f;
     private float spawnGraceEndTime = 0f;
+    private bool enableBreakage = false;
 
-    public void SetBreakageActive(bool active)
+    private void CheckIfBreakageEnabled()
     {
-        enableBreakage = active;
+        enableBreakage = conditionManager.GetBreakageEnableState();
+    }
+
+    private void CheckMaterialColor()
+    {
+        Color color = conditionManager.GetMaterialColor();
+        glassMaterial.SetColor("_VialColor", color);
     }
 
     void Awake()
     {
+        conditionManager = GameObject.Find("ConditionManager").GetComponent<ConditionManager>();
+        CheckIfBreakageEnabled();
+        CheckMaterialColor();
         baseObjectAngle = Quaternion.Euler(Vector3.forward * 0 * 0);
         audioSource = GetComponent<AudioSource>();
         objectIntactness = 100;
