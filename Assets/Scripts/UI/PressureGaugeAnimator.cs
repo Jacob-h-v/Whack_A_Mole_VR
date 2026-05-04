@@ -16,6 +16,11 @@ public class PressureGaugeAnimator : MonoBehaviour
     private float smoothingSpeed = 10f;
 
 
+    void Awake()
+    {
+        emgPointer = FindObjectOfType<EMGPointer>();
+    }
+
     // Update is called once per frame
     void Update()
     {
