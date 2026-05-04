@@ -19,12 +19,11 @@ public class Breakable : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool enableGraspStatusUpdates = false;
     [SerializeField] private bool enableAuras = false;
-    [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
+    [SerializeField] private bool enableBreakage = false;
     [SerializeField] private bool enableWobbles = true;
+    [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
-    [SerializeField] bool enableBreakage = false;
-    [SerializeField] [Range(0f, 1f)] private float spawnGracePeriod = 0.3f;
 
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
@@ -34,7 +33,6 @@ public class Breakable : MonoBehaviour
     private AudioSource audioSource;
     private int lastIntactnessWhenCrackPlayed = 100;
     private float nextCrackAllowedTime = 0f;
-    private float spawnTime;
 
     public void SetBreakageActive(bool active)
     {
@@ -45,7 +43,6 @@ public class Breakable : MonoBehaviour
     {
         baseObjectAngle = Quaternion.Euler(Vector3.forward * 0 * 0);
         audioSource = GetComponent<AudioSource>();
-        spawnTime = Time.time;
         objectIntactness = 100;
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
@@ -61,7 +58,10 @@ public class Breakable : MonoBehaviour
 
     public void BreakObject()
     {
-        Instantiate(brokenObject, transform.position, transform.rotation);
+        if (enableBreakage)
+        {
+            Instantiate(brokenObject, transform.position, transform.rotation);
+        }
 
         InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
         if (interactiveMole != null)
@@ -161,7 +161,10 @@ public class Breakable : MonoBehaviour
 
     private void UpdatePartialBreakage()
     {
-        glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
+        if (enableBreakage)
+        {
+            glassMaterial.SetFloat("_CrackedAmount", (100.0f-objectIntactness)/100.0f);
+        }
     }
 
     private void UpdateAuraShader()
@@ -191,23 +194,9 @@ public class Breakable : MonoBehaviour
 
     private IEnumerator IntactnessAdjustmentLoop()
     {
+
         while (true)
         {
-            if (Time.time - spawnTime < spawnGracePeriod)
-            {
-                objectIntactness = 100;
-                lastIntactnessWhenCrackPlayed = objectIntactness;
-
-                if (enableBreakage)
-                {
-                    UpdatePartialBreakage();
-                    float remainingGraceTime = Mathf.Max(0f, spawnGracePeriod - (Time.time - spawnTime));
-                    yield return new WaitForSeconds(remainingGraceTime);
-                }
-
-                continue;
-            }
-
             if (enableGraspStatusUpdates) 
             {
                 if (emgPointer == null)
@@ -240,6 +229,7 @@ public class Breakable : MonoBehaviour
                     PlayCrackingSound();
                     nextCrackAllowedTime = Time.time + 1f; // Set the next allowed crack sound time
                 }
+            }
 
                 // Check if the object should break
                 if (objectIntactness <= 0)
@@ -247,9 +237,7 @@ public class Breakable : MonoBehaviour
                     BreakObject();
                     yield break; // Exit the coroutine after breaking the object
                 }
-
                 yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
-            }
         }
             
     }
