@@ -702,8 +702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brokenObject: {fileID: 6750459839742862931, guid: 1abb71300b471c645ac0fe8299d53145,
     type: 3}
-  glassMaterial: {fileID: -876546973899608171, guid: 250d6f568f8cb984eacf485003ad19c0,
-    type: 3}
+  glassMaterial: {fileID: 2100000, guid: ab05959583f53274e824e90b38926a55, type: 2}
   auraGood: {fileID: 4254199885747006771}
   auraBadLow: {fileID: 7143578224904355208}
   auraBadHigh: {fileID: 3334856401176447997}
@@ -712,7 +711,6 @@ MonoBehaviour:
   objectIntactness: 100
   enableGraspStatusUpdates: 1
   enableAuras: 0
-  enableBreakage: 0
   enableWobbles: 1
   crackVolume: 1
   wobbleDelay: 0.21
