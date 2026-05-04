@@ -66,7 +66,7 @@ public class Breakable : MonoBehaviour
         InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
         if (interactiveMole != null)
         {
-            interactiveMole.FailPop();
+            //interactiveMole.FailPop();
         }
             Destroy(gameObject); //or disable it, if we need it to not be destroyed.
         
