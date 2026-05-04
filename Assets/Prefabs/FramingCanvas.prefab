@@ -201,22 +201,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mechanism:
+  m_text: '1) The Path to Glory: Master your grip to save the potion and claim a
+    lifetime of infinite luck and prosperity.
 
 
-
-    1) Input outside target range: Reduces object integrity
-    (visual/auditory cracking).
-
-
-
-    2) Input at range extremities: Results in
-    object forfeiture (breakage).
+    2) The Path to Ruin: One careless
+    tremor will shatter the vial, cursing you with seven years of relentless bad
+    luck.
 
 
-
-    3)Input within target range: Initiates integrity
-    restoration.'
+    3)Your Mission: Do not let your future slip through your fingers.
+    Keep the luck alive.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -243,10 +238,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 43.85
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -279,7 +274,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -601.4378, w: 1.388916}
+  m_margin: {x: 0, y: 0, z: -601.4378, w: -459.14423}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -434,7 +429,7 @@ GameObject:
   - component: {fileID: 8077653855088379374}
   - component: {fileID: 6705141177534820401}
   m_Layer: 0
-  m_Name: LossAversionGIF
+  m_Name: FramingGIF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,17 +442,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4175962011067973654}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.5419, y: 7.5419, z: 7.5419}
+  m_LocalScale: {x: 14.847811, y: 9.887515, z: 7.5419}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8488789775060043395}
+  m_Father: {fileID: 5624186010645464979}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 519, y: 60}
+  m_AnchoredPosition: {x: 1758.0577, y: 38.01928}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4572274803842344829
@@ -488,7 +483,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -315412109, guid: ec86ca546ebb5c34b8f4394380f44413, type: 3}
+  m_Sprite: {fileID: 45124002, guid: bc658dea72870d04c9843a4ad40d317c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -602,7 +597,6 @@ RectTransform:
   m_Children:
   - {fileID: 3210917600974788937}
   - {fileID: 5624186010645464979}
-  - {fileID: 2598240442518376099}
   m_Father: {fileID: 1124612145264919718}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -837,7 +831,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Objective: Maintain muscle contraction within the designated target range.'
+  m_text: 'The Stakes: You are holding Felix Felicis, liquid luck in its most volatile
+    form. Every micro-movement of your muscle decides your future.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -864,10 +859,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 27.3
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -900,7 +895,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -601.4378, w: 1.388916}
+  m_margin: {x: 0, y: 0, z: -601.4378, w: -43.334652}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1018,7 +1013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8277089309768042354}
   m_Layer: 0
-  m_Name: LossAversionCanvas
+  m_Name: FramingCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1074,6 +1069,7 @@ RectTransform:
   - {fileID: 6653074798386139783}
   - {fileID: 486423185038419118}
   - {fileID: 7459303267901439218}
+  - {fileID: 2598240442518376099}
   m_Father: {fileID: 8488789775060043395}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1186,7 +1182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CONTINUOUS INPUT STABILISATION
+  m_text: YOUR DESTINY IS IN YOUR HANDS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
