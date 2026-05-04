@@ -24,6 +24,7 @@ public class Breakable : MonoBehaviour
     [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
+    [SerializeField] [Range(0f, 2f)] private float spawnGracePeriod = 0.3f;
 
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
@@ -194,6 +195,10 @@ public class Breakable : MonoBehaviour
 
     private IEnumerator IntactnessAdjustmentLoop()
     {
+        if (spawnGracePeriod > 0f)
+        {
+            yield return new WaitForSeconds(spawnGracePeriod);
+        }
 
         while (true)
         {
