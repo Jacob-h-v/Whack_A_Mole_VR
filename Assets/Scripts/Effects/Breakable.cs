@@ -28,6 +28,12 @@ public class Breakable : MonoBehaviour
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
     [SerializeField] [Range(0f, 2f)] private float spawnGracePeriod = 0.3f;
 
+    [Header("Ramp Settings")]
+    [SerializeField] private float rampSpeed = 1.5f;          // exponential growth rate
+    [SerializeField] private float minRampMultiplier = 0.25f; // starting strength
+    [SerializeField] private float maxRampMultiplier = 2.5f;  // max scaling
+    [SerializeField] private int maxDeltaPerTick = 50;        // spike cap
+
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
     private bool wobbleActive = false;
@@ -38,6 +44,17 @@ public class Breakable : MonoBehaviour
     private float nextCrackAllowedTime = 0f;
     private float spawnGraceEndTime = 0f;
     private bool enableBreakage = false;
+
+    private enum GraspState
+    {
+        None,
+        TooLoose,
+        Ideal,
+        TooTight
+    }
+
+    private GraspState currentState = GraspState.None;
+    private float stateStartTime = 0f;
 
     private void CheckIfBreakageEnabled()
     {
@@ -88,77 +105,73 @@ public class Breakable : MonoBehaviour
         
         // Call any logger functions we need here.
     }
+    
+    private GraspState ClassifyGrasp(float graspStatus)
+    {
+        return graspStatus switch
+        {
+            > 60f and <= 100f => GraspState.TooTight,
+            >= 20f and <= 60f => GraspState.Ideal,
+            < 20f and > 0f    => GraspState.TooLoose,
+            _                 => GraspState.None
+        };
+    }
 
     public void UpdateGraspStatus(float graspStatus)
     {
-        switch (graspStatus)
+        GraspState newState = ClassifyGrasp(graspStatus);
+
+        if (newState != currentState)
         {
-            case >60f and <=100f: // Too tight
+            currentState = newState;
+            stateStartTime = Time.time; // reset ramp
+        }
+
+        switch (currentState)
+        {
+            case GraspState.TooTight:
                 adjustmentPerTick = -25;
-                if(enableAuras)
-                {
-                    auraGood.SetActive(false);
-                    auraBadLow.SetActive(false);
-                    auraBadHigh.SetActive(true);
-                }
-                if(enableWobbles)
-                {
-                    EnableObjectWobble(false);
-                }
+                ToggleAuras(false, false, true);
+                EnableObjectWobble(false);
                 break;
-            case >=20f and <=60f: // Ideal grasp strength
+
+            case GraspState.Ideal:
                 adjustmentPerTick = 25;
-                if(enableAuras)
-                {
-                    auraGood.SetActive(true);
-                    auraBadLow.SetActive(false);
-                    auraBadHigh.SetActive(false);
-                }
-                if(enableWobbles)
-                {
-                    EnableObjectWobble(false);
-                }
+                ToggleAuras(true, false, false);
+                EnableObjectWobble(false);
                 break;
-            case <20f and >0f: // Too Loose
+
+            case GraspState.TooLoose:
                 adjustmentPerTick = -10;
-                if(enableAuras)
-                {
-                    auraGood.SetActive(false);
-                    auraBadLow.SetActive(true);
-                    auraBadHigh.SetActive(false);
-                }
-                if(enableWobbles)
-                {
-                    EnableObjectWobble(true);
-                }
+                ToggleAuras(false, true, false);
+                EnableObjectWobble(true);
                 break;
-            case <=0 or >100f: // No signal or invalid value
-                adjustmentPerTick = 0;
-                if(enableAuras)
-                {
-                    auraGood.SetActive(false);
-                    auraBadLow.SetActive(false);
-                    auraBadHigh.SetActive(false);
-                }
-                if(enableWobbles)
-                {
-                    EnableObjectWobble(false);
-                }
-                break;
+
             default:
                 adjustmentPerTick = 0;
-                if(enableAuras)
-                {
-                    auraGood.SetActive(false);
-                    auraBadLow.SetActive(false);
-                    auraBadHigh.SetActive(false);
-                }
-                if(enableWobbles)
-                {
-                    EnableObjectWobble(false);
-                }
+                ToggleAuras(false, false, false);
+                EnableObjectWobble(false);
                 break;
         }
+    }
+
+    private void ToggleAuras(bool good, bool low, bool high)
+    {
+        if (!enableAuras) return;
+
+        auraGood.SetActive(good);
+        auraBadLow.SetActive(low);
+        auraBadHigh.SetActive(high);
+    }
+
+    private float GetRampMultiplier()
+    {
+        float duration = Time.time - stateStartTime;
+
+        // exponential ease-in
+        float ramp = 1f - Mathf.Exp(-duration * rampSpeed);
+
+        return Mathf.Lerp(minRampMultiplier, maxRampMultiplier, ramp);
     }
 
     public void SetGraspStatusUpdatesEnabled(bool enabled)
@@ -244,8 +257,13 @@ public class Breakable : MonoBehaviour
             }
 
             // Adjust the intactness based on the current grasp adjustment amount
-            objectIntactness += adjustmentPerTick;
-            objectIntactness = Mathf.Clamp(objectIntactness, 0, 100);
+            float rampMultiplier = GetRampMultiplier();
+            int adjustedDelta = Mathf.RoundToInt(adjustmentPerTick * rampMultiplier);
+
+            // clamp extreme spikes
+            adjustedDelta = Mathf.Clamp(adjustedDelta, -maxDeltaPerTick, maxDeltaPerTick);
+
+            objectIntactness = Mathf.Clamp(objectIntactness, -100, 100);
 
             if (enableBreakage)
             {
@@ -258,12 +276,12 @@ public class Breakable : MonoBehaviour
                 }
             }
 
-                // Check if the object should break
-                if (objectIntactness <= 0)
-                {
-                    BreakObject();
-                    yield break; // Exit the coroutine after breaking the object
-                }
+                // // Check if the object should break
+                // if (objectIntactness <= 0)
+                // {
+                //     BreakObject();
+                //     yield break; // Exit the coroutine after breaking the object
+                // }
                 yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
         }
             
@@ -285,14 +303,6 @@ public class Breakable : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        if (adjustmentCoroutine != null) // Should be unnecessary, but just in case..
-        {
-            StopCoroutine(adjustmentCoroutine);
-        }
-    }
-
     public bool BreakIfIntactnessBelow(int threshold)
     {
         if (objectIntactness >= threshold)
@@ -302,5 +312,13 @@ public class Breakable : MonoBehaviour
 
         BreakObject();
         return true;
+    } 
+
+    void OnDestroy()
+    {
+        if (adjustmentCoroutine != null) // Should be unnecessary, but just in case..
+        {
+            StopCoroutine(adjustmentCoroutine);
+        }
     }
 }
