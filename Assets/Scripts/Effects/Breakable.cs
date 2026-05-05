@@ -30,7 +30,7 @@ public class Breakable : MonoBehaviour
 
     [Header("Ramp Settings")]
     public float rampSpeed = 1.5f;          // exponential growth rate
-    public float minRampMultiplier = 0.25f; // starting strength
+    public float minRampMultiplier = 0.5f; // starting strength
     public float maxRampMultiplier = 2.5f;  // max scaling
     public int maxDeltaPerTick = 50;        // spike cap
 
@@ -262,6 +262,8 @@ public class Breakable : MonoBehaviour
 
             // clamp extreme spikes
             adjustedDelta = Mathf.Clamp(adjustedDelta, -maxDeltaPerTick, maxDeltaPerTick);
+
+            objectIntactness += adjustedDelta;
 
             objectIntactness = Mathf.Clamp(objectIntactness, -100, 100);
 

@@ -472,18 +472,41 @@ public abstract class Mole : MonoBehaviour
             return false;
         }
 
-        InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
-        if (interactiveMole != null)
-        {
-            interactiveMole.PlayPopSoundAtPoint();
-        }
-
         Breakable breakable = GetComponent<Breakable>();
         if (breakable == null)
         {
             return false;
         }
 
-        return breakable.BreakIfIntactnessBelow(0);
+        // Check if the user crushed the potion
+        if (breakable.BreakIfIntactnessBelow(0))
+        {
+            // The potion broke. Do not play the success pop sound.
+            // Return true to abort the standard expiration, since Breakable handles destruction.
+            return true;
+        }
+
+        // --- SUCCESS! The potion survived its lifetime gracefully ---
+
+        // 1. Play the component's internal pop sound if it has one
+        InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
+        if (interactiveMole != null)
+        {
+            interactiveMole.PlayPopSoundAtPoint();
+        }
+
+        // 2. Play the global 'ding' (greenMoleHit) from the SoundManager
+        SoundManager soundManager = FindObjectOfType<SoundManager>();
+        if (soundManager != null)
+        {
+            soundManager.PlaySound(gameObject, SoundManager.Sound.greenMoleHit);
+        }
+
+        // 3. Temporarily set state back to Enabled so that Pop() accepts the hit
+        // This ensures the game properly registers the Potion as "Hit/Popped" instead of "Missed"
+        state = States.Enabled;
+        Pop(transform.position);
+
+        return true; 
     }
 }

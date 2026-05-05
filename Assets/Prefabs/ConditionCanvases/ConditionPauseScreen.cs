@@ -60,7 +60,7 @@ public class ConditionPauseScreen : MonoBehaviour
     {
         despawnedByContinue = true;
         Time.timeScale = previousTimeScale;
-        Destroy(gameObject);
+        Destroy(this.gameObject);
     }
 
     private void LogDespawn(string reason)

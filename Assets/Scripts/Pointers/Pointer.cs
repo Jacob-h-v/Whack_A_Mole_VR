@@ -140,6 +140,11 @@ public abstract class Pointer : MonoBehaviour
 
     public void SetPerformanceFeedback(bool perf) => performancefeedback = perf;
 
+    public void SetDwellTime(float newDwellTime)
+    {
+        dwellTime = newDwellTime;
+    }
+
     // Enables the pointer
     public virtual void Enable()
     {

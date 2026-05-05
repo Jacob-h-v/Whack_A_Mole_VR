@@ -10,6 +10,7 @@ TagManager:
   - mole
   - keepBetweenScenes
   - MoleAnchor
+  - PressureGauge
   layers:
   - Default
   - TransparentFX

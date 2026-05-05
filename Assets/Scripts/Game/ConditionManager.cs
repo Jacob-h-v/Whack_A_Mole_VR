@@ -16,7 +16,8 @@ public class ConditionManager : MonoBehaviour
     private Color materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
 
     [Header("References")]
-    [SerializeField] GameObject pressureGauge;
+    [SerializeField] private GameObject pressureGauge;
+    [SerializeField] private EMGPointer emgPointerRight; // Drag Right Controller's EMGPointer script here
 
     [Header("Condition Overview")]
     [SerializeField] ConditionType condition;
@@ -29,7 +30,7 @@ public class ConditionManager : MonoBehaviour
     [SerializeField] private GameObject AnchoringCanvas;
     [SerializeField] private GameObject FramingCanvas;
     [SerializeField] public Transform canvasSpawnPoint;
-
+    
 
     public bool GetBreakageEnableState()
     {
@@ -79,35 +80,53 @@ public class ConditionManager : MonoBehaviour
 
     private void UpdateConditionEnvironment(int condition)
     {
+        // 1. Dynamically find the Pressure Gauge in the active scene, even if it is disabled.
+        PressureGaugeAnimator gaugeScript = FindObjectOfType<PressureGaugeAnimator>(true);
+        if (gaugeScript != null)
+        {
+            pressureGauge = gaugeScript.gameObject;
+        }
+        else
+        {
+            Debug.LogWarning("ConditionManager: Could not find the PressureGauge in the active scene!");
+        }
+
+        // 2. Apply the condition logic
         switch (condition)
         {
             case 0: // Baseline Condition
-                pressureGauge.SetActive(false);
+                if (pressureGauge != null) pressureGauge.SetActive(false);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(0.5f); // Fast dwell time for Baseline
                 conditionManagerBreakageEnabled = false;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 1: // Framing Condition
-                pressureGauge.SetActive(false);
+                if (pressureGauge != null) pressureGauge.SetActive(false);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f); // Restore normal dwell time
                 conditionManagerBreakageEnabled = false;
                 materialColor = new Color(231f/255f, 213f/255f, 66f/255f, 210f/255f);
                 break;
             case 2: // Loss Aversion Condition
-                pressureGauge.SetActive(false);
+                if (pressureGauge != null) pressureGauge.SetActive(false);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f);
                 conditionManagerBreakageEnabled = true;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 3: // Anchoring Condition
-                pressureGauge.SetActive(true);
+                if (pressureGauge != null) pressureGauge.SetActive(true);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f);
                 conditionManagerBreakageEnabled = false;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             case 4: // Debug/Dev Condition
-                pressureGauge.SetActive(true);
+                if (pressureGauge != null) pressureGauge.SetActive(true);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f);
                 conditionManagerBreakageEnabled = true;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
             default:
-                pressureGauge.SetActive(true);
+                if (pressureGauge != null) pressureGauge.SetActive(true);
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f);
                 conditionManagerBreakageEnabled = true;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
