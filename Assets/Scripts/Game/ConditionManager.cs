@@ -28,6 +28,7 @@ public class ConditionManager : MonoBehaviour
     [SerializeField] private GameObject LossAversionCanvas;
     [SerializeField] private GameObject AnchoringCanvas;
     [SerializeField] private GameObject FramingCanvas;
+    [SerializeField] public Transform canvasSpawnPoint;
 
 
     public bool GetBreakageEnableState()
@@ -55,19 +56,19 @@ public class ConditionManager : MonoBehaviour
     public void SetFramingCondition() // Condition 1, Framing
     {
         UpdateConditionEnvironment(1);
-        Instantiate(FramingCanvas);
+        SpawnConditionCanvas(FramingCanvas);
     }
 
     public void SetLossAversionCondition() // Condition 2, Loss Aversion
     {
         UpdateConditionEnvironment(2);
-        Instantiate(LossAversionCanvas);
+        SpawnConditionCanvas(LossAversionCanvas);
     }
 
     public void SetAnchoringCondition() // Condition 3, Anchoring
     {
         UpdateConditionEnvironment(3);
-        Instantiate(AnchoringCanvas);
+        SpawnConditionCanvas(AnchoringCanvas);
     }
 
     public void SetDebugDevCondition() // Condition 4, Debug/Dev
@@ -110,6 +111,52 @@ public class ConditionManager : MonoBehaviour
                 conditionManagerBreakageEnabled = true;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
+        }
+    }
+
+    private void SpawnConditionCanvas(GameObject prefab)
+    {
+        if (prefab == null) return;
+        
+        if (canvasSpawnPoint == null) 
+        {
+            Debug.LogError("ConditionManager: Canvas Spawn Point is not assigned!");
+            return;
+        }
+
+        // 1. Instantiate as a child of the canvasSpawnPoint
+        GameObject spawnedCanvas = Instantiate(prefab, canvasSpawnPoint);
+
+        // 2. Force the transform to absolutely zero out any prefab offsets
+        RectTransform rectTransform = spawnedCanvas.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.localPosition = Vector3.zero;
+            rectTransform.localRotation = Quaternion.identity;
+            // Optionally lock scale to (1,1,1) if your prefabs scale inconsistently:
+            // rectTransform.localScale = Vector3.one; 
+        }
+        else
+        {
+            // Fallback for non-UI objects, just in case
+            spawnedCanvas.transform.localPosition = Vector3.zero;
+            spawnedCanvas.transform.localRotation = Quaternion.identity;
+        }
+
+        // 3. Get the Canvas component and assign the VR Camera
+        Canvas canvas = spawnedCanvas.GetComponent<Canvas>();
+        if (canvas != null)
+        {
+            Camera vrCamera = Camera.main; 
+
+            if (vrCamera != null)
+            {
+                canvas.worldCamera = vrCamera;
+            }
+            else
+            {
+                Debug.LogError("ConditionManager: Could not find a camera tagged 'MainCamera'!");
+            }
         }
     }
 }

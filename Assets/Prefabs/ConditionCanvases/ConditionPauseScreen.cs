@@ -5,21 +5,16 @@ using UnityEngine.UI;
 
 public class ConditionPauseScreen : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private Button continueButton;
+    [Header("Controls")]
+    [SerializeField] private KeyCode continueKey = KeyCode.Space;
 
     private float previousTimeScale = 1f;
+    private bool despawnedByContinue = false;
+    private bool loggedDespawn = false;
 
     private void Awake()
     {
-        if (continueButton != null)
-        {
-            continueButton.onClick.AddListener(HandleContinuePressed);
-        }
-        else
-        {
-            Debug.LogWarning("[ConditionPauseScreen] Continue button is not assigned.");
-        }
+        Debug.Log("[ConditionPauseScreen] I have spawned.");
     }
 
     private void OnEnable()
@@ -28,17 +23,49 @@ public class ConditionPauseScreen : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(continueKey))
+        {
+            HandleContinuePressed();
+        }
+    }
+
     private void OnDisable()
     {
-        if (continueButton != null)
+        if (loggedDespawn)
         {
-            continueButton.onClick.RemoveListener(HandleContinuePressed);
+            return;
         }
+
+        Debug.Log($"[Canvas Disabled] {name} | activeSelf: {gameObject.activeSelf} | activeInHierarchy: {gameObject.activeInHierarchy}", this);
+
+
+        string reason = despawnedByContinue ? "Continue pressed" : "Disabled externally";
+        LogDespawn(reason);
+    }
+
+    private void OnDestroy()
+    {
+        if (loggedDespawn)
+        {
+            return;
+        }
+
+        string reason = despawnedByContinue ? "Continue pressed" : "Destroyed externally";
+        LogDespawn(reason);
     }
 
     private void HandleContinuePressed()
     {
+        despawnedByContinue = true;
         Time.timeScale = previousTimeScale;
         Destroy(gameObject);
+    }
+
+    private void LogDespawn(string reason)
+    {
+        loggedDespawn = true;
+        Debug.Log($"[ConditionPauseScreen] Despawning. Reason: {reason}.");
     }
 }
