@@ -321,4 +321,24 @@ public class Breakable : MonoBehaviour
             StopCoroutine(adjustmentCoroutine);
         }
     }
+
+    public void SetRampSpeed(float value)
+    {
+        rampSpeed = value;
+    }
+
+    public void SetMinRampMultiplier(float value)
+    {
+        minRampMultiplier = value;
+    }
+
+    public void SetMaxRampMultiplier(float value)
+    {
+        maxRampMultiplier = value;
+    }
+
+    public void SetMaxDeltaPerTick(int value)
+    {
+        maxDeltaPerTick = value;
+    }
 }

@@ -23,6 +23,13 @@ public class ConditionManager : MonoBehaviour
 
     private bool conditionManagerBreakageEnabled = false; //inspector?
 
+
+    [Header("Condition Canvas")]
+    [SerializeField] private GameObject LossAversionCanvas;
+    [SerializeField] private GameObject AnchoringCanvas;
+    [SerializeField] private GameObject FramingCanvas;
+
+
     public bool GetBreakageEnableState()
     {
         bool breakageState = conditionManagerBreakageEnabled;
@@ -48,16 +55,19 @@ public class ConditionManager : MonoBehaviour
     public void SetFramingCondition() // Condition 1, Framing
     {
         UpdateConditionEnvironment(1);
+        Instantiate(FramingCanvas);
     }
 
     public void SetLossAversionCondition() // Condition 2, Loss Aversion
     {
         UpdateConditionEnvironment(2);
+        Instantiate(LossAversionCanvas);
     }
 
     public void SetAnchoringCondition() // Condition 3, Anchoring
     {
         UpdateConditionEnvironment(3);
+        Instantiate(AnchoringCanvas);
     }
 
     public void SetDebugDevCondition() // Condition 4, Debug/Dev

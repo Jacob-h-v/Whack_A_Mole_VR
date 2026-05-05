@@ -149,6 +149,10 @@ public class PatternInterface : MonoBehaviour
                     SetModifier(action);
                     break;
 
+                case "BREAKAGERAMP":
+                    SetBreakageRamp(action);
+                    break;
+
                 case "SEGMENT":
                     SetSegment(action["ID"], action["LABEL"]);
                     break;
@@ -262,7 +266,8 @@ public class PatternInterface : MonoBehaviour
     }
 
     // Spawns a Mole
-    private void SetMole(string xIndex, string yIndex, string lifeTime, Mole.MoleType moleType, Mole.MoleOutcome outcome, string validationArg = "")
+    private void SetMole(string xIndex, string yIndex, string lifeTime, Mole.MoleType moleType, Mole.MoleOutcome outcome, string validationArg = ""
+    )
     {
         int targetSpawnId = ((int.Parse(xIndex)) * 100) + (int.Parse(yIndex));
         Mole mole = wallManager.CreateMole(targetSpawnId, ParseFloat(lifeTime), gameDirector.GetMoleExpiringDuration(), moleType, outcome, validationArg);
@@ -466,5 +471,42 @@ public class PatternInterface : MonoBehaviour
         }
 
         Debug.LogWarning("CONDITION requires a valid token (e.g., CONDITION:(FRAMING)) or TYPE.");
+    }
+
+    private void SetBreakageRamp(Dictionary<string, string> action)
+    {
+        Breakable[] breakables = FindObjectsOfType<Breakable>();
+        if (breakables.Length == 0)
+        {
+            Debug.LogWarning("PatternInterface: BREAKAGERAMP called but no Breakable components found in scene.");
+            return;
+        }
+
+        string tempValue;
+        bool hasRampSpeed = action.TryGetValue("RAMPSPEED", out tempValue);
+        float rampSpeed = hasRampSpeed ? ParseFloat(tempValue) : 0f;
+
+        bool hasMinRampMultiplier = action.TryGetValue("MINRAMPMULTIPLIER", out tempValue);
+        float minRampMultiplier = hasMinRampMultiplier ? ParseFloat(tempValue) : 0f;
+
+        bool hasMaxRampMultiplier = action.TryGetValue("MAXRAMPMULTIPLIER", out tempValue);
+        float maxRampMultiplier = hasMaxRampMultiplier ? ParseFloat(tempValue) : 0f;
+
+        bool hasMaxDeltaPerTick = action.TryGetValue("MAXDELTAPERTICK", out tempValue);
+        int maxDeltaPerTick = hasMaxDeltaPerTick ? int.Parse(tempValue, CultureInfo.InvariantCulture) : 0;
+
+        if (!hasRampSpeed && !hasMinRampMultiplier && !hasMaxRampMultiplier && !hasMaxDeltaPerTick)
+        {
+            Debug.LogWarning("PatternInterface: BREAKAGERAMP called with no recognized keys (RAMPSPEED, MINRAMPMULTIPLIER, MAXRAMPMULTIPLIER, MAXDELTAPERTICK).");
+            return;
+        }
+
+        foreach (Breakable breakable in breakables)
+        {
+            if (hasRampSpeed) breakable.SetRampSpeed(rampSpeed);
+            if (hasMinRampMultiplier) breakable.SetMinRampMultiplier(minRampMultiplier);
+            if (hasMaxRampMultiplier) breakable.SetMaxRampMultiplier(maxRampMultiplier);
+            if (hasMaxDeltaPerTick) breakable.SetMaxDeltaPerTick(maxDeltaPerTick);
+        }
     }
 }

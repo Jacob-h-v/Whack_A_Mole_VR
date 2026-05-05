@@ -170,7 +170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -623, y: 246}
+  m_AnchoredPosition: {x: -623, y: 192}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2042885219965413192
@@ -201,22 +201,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mechanism:
-
-
-
-    1) Input outside target range: Reduces object integrity
-    (visual/auditory cracking).
-
-
-
-    2) Input at range extremities: Results in
-    object forfeiture (breakage).
-
-
-
-    3)Input within target range: Initiates integrity
-    restoration.'
+  m_text: "Operational Zones:\r\n\r\n1) Blue Sector (0%\u201320%): Insufficient input
+    intensity.\r\n\n2) Green Sector (20%\u201360%): Target Anchor Zone. Stabilise
+    input within this pre-filled arc for optimal results.\r\n\n3) Red Sector (60%\u2013100%):
+    Excessive input intensity.\n\nReal-Time Indicator: The gauge needle reflects
+    current sensor data.\n\nObjective: Steer and maintain the needle within the static
+    green anchor zone to ensure object stability."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -243,10 +233,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 31.7
+  m_fontSizeBase: 32.64
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -279,7 +269,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -601.4378, w: 1.388916}
+  m_margin: {x: 0, y: 0, z: -631.05634, w: -460.08325}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -320,7 +310,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 219, y: -437}
+  m_AnchoredPosition: {x: 347, y: -479}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3877759044618943632
@@ -434,7 +424,7 @@ GameObject:
   - component: {fileID: 8077653855088379374}
   - component: {fileID: 6705141177534820401}
   m_Layer: 0
-  m_Name: LossAversionGIF
+  m_Name: AnchoringGIF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -449,7 +439,7 @@ RectTransform:
   m_GameObject: {fileID: 4175962011067973654}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.5419, y: 7.5419, z: 7.5419}
+  m_LocalScale: {x: 2.3411567, y: 2.3411567, z: 2.3411567}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8488789775060043395}
@@ -458,7 +448,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 519, y: 60}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 320, y: 240.00586}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4572274803842344829
 CanvasRenderer:
@@ -837,7 +827,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Objective: Maintain muscle contraction within the designated target range.'
+  m_text: 'System Interface: A radial pressure gauge represents the real-time intensity
+    of your muscle contraction.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1017,8 +1008,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8277089309768042354}
+  - component: {fileID: 6631874217453991238}
   m_Layer: 0
-  m_Name: LossAversionCanvas
+  m_Name: AnchoringCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1040,6 +1032,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6631874217453991238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7995520098029285344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185bad61d023e7244800558bff429cf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  continueButton: {fileID: 4098259288578755039}
 --- !u!1 &8836604569865388565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,7 +1191,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CONTINUOUS INPUT STABILISATION
+  m_text: 'TASK: INPUT INTENSITY CALIBRATION'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
