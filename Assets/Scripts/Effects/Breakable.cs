@@ -29,10 +29,10 @@ public class Breakable : MonoBehaviour
     [SerializeField] [Range(0f, 2f)] private float spawnGracePeriod = 0.3f;
 
     [Header("Ramp Settings")]
-    [SerializeField] private float rampSpeed = 1.5f;          // exponential growth rate
-    [SerializeField] private float minRampMultiplier = 0.25f; // starting strength
-    [SerializeField] private float maxRampMultiplier = 2.5f;  // max scaling
-    [SerializeField] private int maxDeltaPerTick = 50;        // spike cap
+    public float rampSpeed = 1.5f;          // exponential growth rate
+    public float minRampMultiplier = 0.25f; // starting strength
+    public float maxRampMultiplier = 2.5f;  // max scaling
+    public int maxDeltaPerTick = 50;        // spike cap
 
     private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
