@@ -69,10 +69,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -4053,12 +4053,12 @@ TextureImporter:
       Anchoring-ezgif.com-gif-to-sprite-converter_68: 1649500352
       Anchoring-ezgif.com-gif-to-sprite-converter_93: -1173317481
       Anchoring-ezgif.com-gif-to-sprite-converter_54: 1545941352
-      Anchoring-ezgif.com-gif-to-sprite-converter_42: 991341240
-      Anchoring-ezgif.com-gif-to-sprite-converter_85: 630152978
       Anchoring-ezgif.com-gif-to-sprite-converter_61: -1847100077
-      Anchoring-ezgif.com-gif-to-sprite-converter_14: -606947935
-      Anchoring-ezgif.com-gif-to-sprite-converter_114: 1587072374
       Anchoring-ezgif.com-gif-to-sprite-converter_148: 1262314908
+      Anchoring-ezgif.com-gif-to-sprite-converter_42: 991341240
+      Anchoring-ezgif.com-gif-to-sprite-converter_114: 1587072374
+      Anchoring-ezgif.com-gif-to-sprite-converter_85: 630152978
+      Anchoring-ezgif.com-gif-to-sprite-converter_14: -606947935
       Anchoring-ezgif.com-gif-to-sprite-converter_49: 595196336
       Anchoring-ezgif.com-gif-to-sprite-converter_19: -2004935469
       Anchoring-ezgif.com-gif-to-sprite-converter_88: -1970098040
@@ -4092,15 +4092,15 @@ TextureImporter:
       Anchoring-ezgif.com-gif-to-sprite-converter_13: 379684061
       Anchoring-ezgif.com-gif-to-sprite-converter_37: -538715770
       Anchoring-ezgif.com-gif-to-sprite-converter_158: -813666385
-      Anchoring-ezgif.com-gif-to-sprite-converter_128: -634479009
       Anchoring-ezgif.com-gif-to-sprite-converter_20: 1098939090
+      Anchoring-ezgif.com-gif-to-sprite-converter_128: -634479009
       Anchoring-ezgif.com-gif-to-sprite-converter_154: 839902750
       Anchoring-ezgif.com-gif-to-sprite-converter_180: 868736256
       Anchoring-ezgif.com-gif-to-sprite-converter_140: -1896513144
       Anchoring-ezgif.com-gif-to-sprite-converter_106: 1055743574
-      Anchoring-ezgif.com-gif-to-sprite-converter_136: 317865947
       Anchoring-ezgif.com-gif-to-sprite-converter_182: 420914659
       Anchoring-ezgif.com-gif-to-sprite-converter_161: -1264879793
+      Anchoring-ezgif.com-gif-to-sprite-converter_136: 317865947
       Anchoring-ezgif.com-gif-to-sprite-converter_21: 1654219990
       Anchoring-ezgif.com-gif-to-sprite-converter_165: 1403260583
       Anchoring-ezgif.com-gif-to-sprite-converter_82: 300710812
@@ -4111,9 +4111,9 @@ TextureImporter:
       Anchoring-ezgif.com-gif-to-sprite-converter_38: -2087177134
       Anchoring-ezgif.com-gif-to-sprite-converter_84: -1609263811
       Anchoring-ezgif.com-gif-to-sprite-converter_164: 1805458296
-      Anchoring-ezgif.com-gif-to-sprite-converter_103: -1511515215
-      Anchoring-ezgif.com-gif-to-sprite-converter_109: 289285415
       Anchoring-ezgif.com-gif-to-sprite-converter_167: -420304237
+      Anchoring-ezgif.com-gif-to-sprite-converter_109: 289285415
+      Anchoring-ezgif.com-gif-to-sprite-converter_103: -1511515215
       Anchoring-ezgif.com-gif-to-sprite-converter_78: -406737268
       Anchoring-ezgif.com-gif-to-sprite-converter_11: 198594132
       Anchoring-ezgif.com-gif-to-sprite-converter_16: 1252150885
