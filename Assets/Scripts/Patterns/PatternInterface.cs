@@ -17,6 +17,7 @@ public class PatternInterface : MonoBehaviour
     private PlayerPanel playerPanel;
     private ThemeManager themeManager;
     private TactorConnector tactorConnector;
+    private ConditionManager conditionManager;
     private float randVar = 0f;
 
     private Dictionary<int, Mole> targetsList = null;
@@ -73,6 +74,7 @@ public class PatternInterface : MonoBehaviour
         playerPanel = FindObjectOfType<PlayerPanel>();
         themeManager = FindObjectOfType<ThemeManager>();
         tactorConnector = FindObjectOfType<TactorConnector>();
+        conditionManager = FindObjectOfType<ConditionManager>();
     }
 
     void Start()
@@ -162,6 +164,10 @@ public class PatternInterface : MonoBehaviour
 
                 case "RANDGEN":
                     RegenRand(ParseFloat(action["STARTVALUE"]), ParseFloat(action["ENDVALUE"]), bool.Parse(action["ISINT"]));
+                    break;
+
+                case "CONDITION":
+                    SetCondition(action);
                     break;
 
                 default:
@@ -395,5 +401,70 @@ public class PatternInterface : MonoBehaviour
         {
             wallManager.SetOutlineVisible(bool.Parse(tempValue));
         }
+    }
+
+    private void SetCondition(Dictionary<string, string> action)
+    {
+        if (conditionManager == null)
+        {
+            Debug.LogWarning("PatternInterface: ConditionManager not found in scene.");
+            return;
+        }
+
+        if (action.ContainsKey("BASELINE"))
+        {
+            conditionManager.SetBaselineCondition();
+            return;
+        }
+        if (action.ContainsKey("FRAMING"))
+        {
+            conditionManager.SetFramingCondition();
+            return;
+        }
+        if (action.ContainsKey("LOSSAVERSION"))
+        {
+            conditionManager.SetLossAversionCondition();
+            return;
+        }
+        if (action.ContainsKey("ANCHORING"))
+        {
+            conditionManager.SetAnchoringCondition();
+            return;
+        }
+        if (action.ContainsKey("DEBUG") || action.ContainsKey("DEV"))
+        {
+            conditionManager.SetDebugDevCondition();
+            return;
+        }
+
+        string tempValue;
+        if (action.TryGetValue("TYPE", out tempValue))
+        {
+            switch (tempValue.ToUpperInvariant())
+            {
+                case "BASELINE":
+                    conditionManager.SetBaselineCondition();
+                    break;
+                case "FRAMING":
+                    conditionManager.SetFramingCondition();
+                    break;
+                case "LOSSAVERSION":
+                    conditionManager.SetLossAversionCondition();
+                    break;
+                case "ANCHORING":
+                    conditionManager.SetAnchoringCondition();
+                    break;
+                case "DEBUG":
+                case "DEV":
+                    conditionManager.SetDebugDevCondition();
+                    break;
+                default:
+                    Debug.LogWarning($"Unknown CONDITION type '{tempValue}'.");
+                    break;
+            }
+            return;
+        }
+
+        Debug.LogWarning("CONDITION requires a valid token (e.g., CONDITION:(FRAMING)) or TYPE.");
     }
 }
