@@ -222,9 +222,12 @@ public abstract class Mole : MonoBehaviour
             return MolePopAnswer.Expired;
         }
 
+        string popEventName = moleType == MoleType.PotionMole ? "Mole Popped" : "Mole Hit";
+        string fakePopEventName = moleType == MoleType.PotionMole ? "Mole Popped" : "Fake Mole Hit";
+
         if (moleOutcome == MoleOutcome.Valid)
         {
-            loggerNotifier.NotifyLogger("Mole Hit", EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
+            loggerNotifier.NotifyLogger(popEventName, EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
             {
                 {"MoleActivatedDuration", lifeTime - activatedTimeLeft},
                 {"MoleSurfaceHitLocationX", localHitPoint.x},
@@ -236,7 +239,7 @@ public abstract class Mole : MonoBehaviour
         }
         else
         {
-            loggerNotifier.NotifyLogger("Fake Mole Hit", EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
+            loggerNotifier.NotifyLogger(fakePopEventName, EventLogger.EventType.MoleEvent, new Dictionary<string, object>()
             {
                 {"MoleActivatedDuration", lifeTime - activatedTimeLeft},
                 {"MoleSurfaceHitLocationX", localHitPoint.x},
@@ -318,6 +321,11 @@ public abstract class Mole : MonoBehaviour
                                 {"MoleActivatedDuration", lifeTime},
                                 {"MoleType", System.Enum.GetName(typeof(MoleType), moleType)}
                             });
+
+        if (TryBreakPotionOnExpire())
+        {
+            yield break;
+        }
 
         ChangeState(States.Expired);
         yield break;
@@ -455,5 +463,27 @@ public abstract class Mole : MonoBehaviour
             {"MoleNormalizedIndexX", normalizedIndex.x},
             {"MoleNormalizedIndexY", normalizedIndex.y},
         });
+    }
+
+    private bool TryBreakPotionOnExpire()
+    {
+        if (moleType != MoleType.PotionMole)
+        {
+            return false;
+        }
+
+        InteractiveMole interactiveMole = GetComponent<InteractiveMole>();
+        if (interactiveMole != null)
+        {
+            interactiveMole.PlayPopSoundAtPoint();
+        }
+
+        Breakable breakable = GetComponent<Breakable>();
+        if (breakable == null)
+        {
+            return false;
+        }
+
+        return breakable.BreakIfIntactnessBelow(0);
     }
 }

@@ -247,6 +247,13 @@ public class InteractiveMole : Mole
         audioSource.Play();
     }
 
+    public void PlayPopSoundAtPoint()
+    {
+        if (popSound == null) return;
+        float volume = audioSource != null ? audioSource.volume : 1f;
+        AudioSource.PlayClipAtPoint(popSound, transform.position, volume);
+    }
+
     public void FailPop()
     {
         RequestPop(isFail: true);

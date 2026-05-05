@@ -292,4 +292,15 @@ public class Breakable : MonoBehaviour
             StopCoroutine(adjustmentCoroutine);
         }
     }
+
+    public bool BreakIfIntactnessBelow(int threshold)
+    {
+        if (objectIntactness >= threshold)
+        {
+            return false;
+        }
+
+        BreakObject();
+        return true;
+    }
 }
