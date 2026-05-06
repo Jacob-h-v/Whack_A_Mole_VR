@@ -73,6 +73,8 @@ public class EMGPointer : Pointer
         }
     }
 
+    public float GetCurrentEMGSmoothedAverage() => (float)emgDataProcessor.GetSmoothedAbsAverage();
+
     public override void Enable()
     {
         if (active) return;
@@ -448,7 +450,13 @@ public class EMGPointer : Pointer
 
         return SteamVR.instance.GetStringProperty(property, deviceIndex);
     }
+
+
+
+
 }
+
+
 
 public enum EMGPointerBehavior
 {

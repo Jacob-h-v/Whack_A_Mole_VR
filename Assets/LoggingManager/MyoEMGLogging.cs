@@ -35,6 +35,8 @@ public class MyoEMGLogging : MonoBehaviour
         EMGCol = new List<string> { "EMG1", "EMG2", "EMG3", "EMG4", "EMG5", "EMG6", "EMG7", "EMG8" };
         List<string> logCols = new List<string>(EMGCol)
         {
+            "AverageEMG",
+            "MaxEMG",
             "CurrentGestures",
             "Threshold",
             "PredictionConfidence"
@@ -88,6 +90,9 @@ public class MyoEMGLogging : MonoBehaviour
                 .Select((col, i) => new { col, value = data.Emg[i] })
                 .ToDictionary(x => x.col, x => (object)x.value);
 
+            // Add our extra tracking data
+            emgData["AverageEMG"] = rightHandEMGPointer.GetCurrentEMGSmoothedAverage();
+            emgData["MaxEMG"] = rightHandEMGPointer.GetMaxEMG();
             emgData["CurrentGestures"] = rightHandEMGPointer.GetCurrentGesture().ToString();
             emgData["Threshold"] = rightHandEMGPointer.getThresholdState();
             emgData["PredictionConfidence"] = rightHandEMGPointer.GetCurrentGestureConfidence().ToString();
