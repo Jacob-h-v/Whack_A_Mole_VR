@@ -22,7 +22,7 @@ public class EMGPointer : Pointer
     [SerializeField] private EMGPointerBehavior emgPointerBehavior;
     [SerializeField] private bool recordMaximumEMG = false; // If true, records the maximum EMG value reached during the session.
     [SerializeField] private float maxEMG = 0.0f;
-    [SerializeField][Range(0f, 1f)] private float emgThreshold = 0.3f; // Threshold above which the EMG signal is considered as a muscle activation (0-1).
+    [SerializeField][Range(0f, 1f)] private float emgThreshold = 0.2f; // Threshold above which the EMG signal is considered as a muscle activation (0-1).
     [SerializeField] private bool followUltimateTracker = true;
     [SerializeField] private float trackerSearchInterval = 1f;
     [SerializeField] private string trackerSerialContains = "";
