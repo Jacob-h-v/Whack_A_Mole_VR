@@ -162,7 +162,7 @@ public class Breakable : MonoBehaviour
             default:
                 adjustmentPerTick = 0;
                 ToggleAuras(false, false, false);
-                EnableObjectWobble(true);
+                EnableObjectWobble(false);
                 break;
         }
     }
