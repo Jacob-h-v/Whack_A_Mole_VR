@@ -80,8 +80,8 @@ MonoBehaviour:
 
 
 
-    3)Input within target range: Initiates integrity
-    restoration.'
+    3) Input within target range: Initiates
+    integrity restoration.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -795,7 +795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185bad61d023e7244800558bff429cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueButton: {fileID: 0}
+  continueKey: 32
 --- !u!1 &8836604569865388565
 GameObject:
   m_ObjectHideFlags: 0
