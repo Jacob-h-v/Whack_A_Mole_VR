@@ -168,8 +168,10 @@ public class InteractiveMole : Mole
         onMolePopEvent?.Invoke();
         onMolePopWithValidationEvent?.Invoke(GetValidationArg());
 
-        float duration = GetCurrentAnimationDuration();
-        if (duration > 0f) yield return new WaitForSeconds(Mathf.Max(0.05f, duration));
+        float animDuration = GetCurrentAnimationDuration();
+        float audioDuration = selectedPopSound != null ? selectedPopSound.length : 0f;
+        float maxDuration = Mathf.Max(animDuration, audioDuration);
+        if (maxDuration > 0f) yield return new WaitForSeconds(Mathf.Max(0.05f, maxDuration));
 
         yield return base.PlayPopping();
     }
