@@ -713,8 +713,12 @@ MonoBehaviour:
   enableAuras: 0
   enableWobbles: 1
   crackVolume: 1
-  wobbleDelay: 0.21
+  wobbleDelay: 1
   maxWobble: 60
+  wobbleSpeedMin: 2
+  wobbleSpeedMax: 3
+  wobbleLerpSpeed: 5
+  minWobble: 40
   spawnGracePeriod: 0.3
   rampSpeed: 1.5
   minRampMultiplier: 0.25

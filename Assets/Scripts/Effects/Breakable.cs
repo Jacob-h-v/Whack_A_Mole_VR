@@ -26,6 +26,10 @@ public class Breakable : MonoBehaviour
     [SerializeField] [Range(0f, 2f)] private float crackVolume = 1f;
     [SerializeField] [Range(0.1f, 2.0f)] private float wobbleDelay = 0.5f;
     [SerializeField] [Range(1f, 100f)] private float maxWobble = 10f;
+    [SerializeField] [Range(1f, 10f)] private float wobbleSpeedMin = 2f;
+    [SerializeField] [Range(1f, 10f)] private float wobbleSpeedMax = 5f;
+    [SerializeField] [Range(0.1f, 10f)] private float wobbleLerpSpeed = 5f;
+    [SerializeField] [Range(0.1f, 50f)] private float minWobble = 1.0f;
     [SerializeField] [Range(0f, 2f)] private float spawnGracePeriod = 0.3f;
 
     [Header("Ramp Settings")]
@@ -34,9 +38,10 @@ public class Breakable : MonoBehaviour
     public float maxRampMultiplier = 2.5f;  // max scaling
     public int maxDeltaPerTick = 50;        // spike cap
 
-    private Quaternion wobbleTargetAngle;
     private Quaternion baseObjectAngle;
     private bool wobbleActive = false;
+    private float wobbleIntensity = 0f;
+    private float wobbleSpeed;
     private int adjustmentPerTick = 0;
     private Coroutine adjustmentCoroutine;
     private AudioSource audioSource;
@@ -85,7 +90,14 @@ public class Breakable : MonoBehaviour
     {
         if(wobbleActive)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, wobbleTargetAngle, Time.deltaTime);
+            float wobbleAngle = Mathf.Sin(Time.time * wobbleSpeed) * wobbleIntensity;
+            wobbleAngle = Mathf.Clamp(wobbleAngle, -80f, 80f);
+            Quaternion target = baseObjectAngle * Quaternion.Euler(Vector3.forward * wobbleAngle);
+            transform.rotation = Quaternion.Lerp(transform.rotation, target, Time.deltaTime * wobbleLerpSpeed);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, baseObjectAngle, Time.deltaTime * wobbleLerpSpeed);
         }
     }
 
@@ -150,7 +162,7 @@ public class Breakable : MonoBehaviour
             default:
                 adjustmentPerTick = 0;
                 ToggleAuras(false, false, false);
-                EnableObjectWobble(false);
+                EnableObjectWobble(true);
                 break;
         }
     }
@@ -293,15 +305,13 @@ public class Breakable : MonoBehaviour
     {
         if(Enabled)
         {
-            float intensity = Random.Range(0.1f, maxWobble);
-            float curve = Mathf.Sin(Random.Range(0, Mathf.PI * 2));
-            wobbleTargetAngle = Quaternion.Euler(Vector3.forward * curve * intensity);
+            wobbleIntensity = Random.Range(minWobble, maxWobble);
+            wobbleSpeed = Random.Range(wobbleSpeedMin, wobbleSpeedMax);
             wobbleActive = true;
         }
         else
         {
             wobbleActive = false;
-            transform.rotation = Quaternion.Lerp(transform.rotation, baseObjectAngle, Time.deltaTime);
         }
     }
 
