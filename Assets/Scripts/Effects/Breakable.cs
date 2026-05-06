@@ -293,16 +293,9 @@ public class Breakable : MonoBehaviour
     {
         if(Enabled)
         {
-            // Mostly small tremors, occasional sharper kicks
-            float intensity = Random.Range(maxWobble * 0.15f, maxWobble * 0.55f);
-
-            if (Random.value < 0.15f) // rare stronger jolt
-                intensity *= Random.Range(1.3f, 1.8f);
-
-            // Sharp left/right snap instead of smooth sine
-            float direction = Random.value < 0.5f ? -1f : 1f;
-
-            wobbleTargetAngle = Quaternion.Euler(0f, 0f, direction * intensity);
+            float intensity = Random.Range(0.1f, maxWobble);
+            float curve = Mathf.Sin(Random.Range(0, Mathf.PI * 2));
+            wobbleTargetAngle = Quaternion.Euler(Vector3.forward * curve * intensity);
             wobbleActive = true;
         }
         else
