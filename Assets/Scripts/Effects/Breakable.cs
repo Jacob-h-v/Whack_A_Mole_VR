@@ -343,4 +343,6 @@ public class Breakable : MonoBehaviour
     {
         maxDeltaPerTick = value;
     }
+
+    public int GetObjectIntactness() => objectIntactness;
 }

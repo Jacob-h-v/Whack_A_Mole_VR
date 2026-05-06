@@ -95,7 +95,8 @@ public abstract class Mole : MonoBehaviour
             {"MoleNormalizedIndexX", "NULL"},
             {"MoleNormalizedIndexY", "NULL"},
             {"MoleSurfaceHitLocationX", "NULL"},
-            {"MoleSurfaceHitLocationY", "NULL"}
+            {"MoleSurfaceHitLocationY", "NULL"},
+            {"MoleIntegrity", "NULL"} 
         });
     }
 
@@ -446,6 +447,17 @@ public abstract class Mole : MonoBehaviour
         string MoleIndexX = moleId.Substring(3, 2);
         string MoleIndexY = moleId.Substring(5, 2);
 
+        // Fetch Integrity if it is a PotionMole
+        string integrityValue = "NULL";
+        if (moleType == MoleType.PotionMole)
+        {
+            Breakable breakable = GetComponent<Breakable>();
+            if (breakable != null)
+            {
+                integrityValue = breakable.GetObjectIntactness().ToString();
+            }
+        }
+
         return new LogEventContainer(new Dictionary<string, object>(){
             {"MolePositionWorldX", transform.position.x},
             {"MolePositionWorldY", transform.position.y},
@@ -462,6 +474,7 @@ public abstract class Mole : MonoBehaviour
             {"MoleIndexY", MoleIndexY},
             {"MoleNormalizedIndexX", normalizedIndex.x},
             {"MoleNormalizedIndexY", normalizedIndex.y},
+            {"MoleIntegrity", integrityValue}
         });
     }
 

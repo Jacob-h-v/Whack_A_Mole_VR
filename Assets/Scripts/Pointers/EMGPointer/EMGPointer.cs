@@ -206,10 +206,15 @@ public class EMGPointer : Pointer
         }
     }
 
-    public void ResetMaxEMG() // Call by CALIBRATION keyworkd in Calibration Event (Game Director)
+    public void ResetMaxEMG() // Called by CALIBRATION:(TYPE=MAXEMG)
     {
         maxEMG = 0.0f;
         recordMaximumEMG = true;
+    }
+
+    public void StopRecordingMaxEMG() // Called by CALIBRATION:(TYPE=STOPEMG)
+    {
+        recordMaximumEMG = false;
     }
 
     public float GetCurrentMvcRatio()
