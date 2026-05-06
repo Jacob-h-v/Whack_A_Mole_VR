@@ -20,7 +20,7 @@ public class EMGPointer : Pointer
     [SerializeField] private GameObject SteamVRVisualHand;
     [SerializeField] private EMGDataProcessor emgDataProcessor;
     [SerializeField] private EMGPointerBehavior emgPointerBehavior;
-    [SerializeField] private bool recordMaximumEMG = true; // If true, records the maximum EMG value reached during the session.
+    [SerializeField] private bool recordMaximumEMG = false; // If true, records the maximum EMG value reached during the session.
     [SerializeField] private float maxEMG = 0.0f;
     [SerializeField][Range(0f, 1f)] private float emgThreshold = 0.3f; // Threshold above which the EMG signal is considered as a muscle activation (0-1).
     [SerializeField] private bool followUltimateTracker = true;
@@ -59,8 +59,8 @@ public class EMGPointer : Pointer
     void Update()
     {
         // Update max EMG if recording is enabled
-        if (recordMaximumEMG) maxEMG = Mathf.Max(maxEMG, (float)emgDataProcessor.GetSmoothedAbsAverage());
-        thresholdState = IsAboveThreshold(emgDataProcessor.GetSmoothedAbsAverage()) ? "above" : "below";
+        if (recordMaximumEMG) maxEMG = Mathf.Max(maxEMG, GetCurrentEMGSmoothedAverage());
+        thresholdState = IsAboveThreshold(GetCurrentEMGSmoothedAverage()) ? "above" : "below";
 
         // Disable default visual hand when EMG pointer enabled
         if (SteamVRVisualHand != null && SteamVRVisualHand.activeSelf) SteamVRVisualHand.SetActive(false);
