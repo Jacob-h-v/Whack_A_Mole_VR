@@ -169,7 +169,7 @@ public class InteractiveMole : Mole
         onMolePopWithValidationEvent?.Invoke(GetValidationArg());
 
         float animDuration = GetCurrentAnimationDuration();
-        float audioDuration = selectedPopSound != null ? selectedPopSound.length : 0f;
+        float audioDuration = selectedPopSound != null ? selectedPopSound.length : 0.5f;
         float maxDuration = Mathf.Max(animDuration, audioDuration);
         if (maxDuration > 0f) yield return new WaitForSeconds(Mathf.Max(0.05f, maxDuration));
 
