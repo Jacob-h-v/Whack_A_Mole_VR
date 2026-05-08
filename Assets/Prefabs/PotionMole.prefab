@@ -678,7 +678,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   animatorLayerIndex: 0
   enableSound: {fileID: 0}
-  popSound: {fileID: 0}
+  popSound: {fileID: 8300000, guid: b5a53fed41d97f641a51659441e66708, type: 3}
   failPopSound: {fileID: 8300000, guid: b41873dfdb123404fafce83c4a49888d, type: 3}
   hoverInfoContainer: {fileID: 0}
   hoverInfos:
