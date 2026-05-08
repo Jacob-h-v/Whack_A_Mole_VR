@@ -49,6 +49,7 @@ public class Breakable : MonoBehaviour
     private float nextCrackAllowedTime = 0f;
     private float spawnGraceEndTime = 0f;
     private bool enableBreakage = false;
+    private int healAmount = 20;
 
     private enum GraspState
     {
@@ -148,7 +149,7 @@ public class Breakable : MonoBehaviour
                 break;
 
             case GraspState.Ideal:
-                adjustmentPerTick = 25;
+                adjustmentPerTick = healAmount;
                 ToggleAuras(true, false, false);
                 EnableObjectWobble(false);
                 break;
@@ -160,9 +161,9 @@ public class Breakable : MonoBehaviour
                 break;
 
             default:
-                adjustmentPerTick = 0;
+                adjustmentPerTick = -5;
                 ToggleAuras(false, false, false);
-                EnableObjectWobble(false);
+                EnableObjectWobble(true);
                 break;
         }
     }
@@ -337,6 +338,11 @@ public class Breakable : MonoBehaviour
     public void SetRampSpeed(float value)
     {
         rampSpeed = value;
+    }
+
+    public void SetHealAmount(int value)
+    {
+        healAmount = value;
     }
 
     public void SetMinRampMultiplier(float value)

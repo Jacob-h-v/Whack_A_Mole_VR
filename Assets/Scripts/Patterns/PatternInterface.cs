@@ -495,9 +495,12 @@ public class PatternInterface : MonoBehaviour
         bool hasMaxDeltaPerTick = action.TryGetValue("MAXDELTAPERTICK", out tempValue);
         int maxDeltaPerTick = hasMaxDeltaPerTick ? int.Parse(tempValue, CultureInfo.InvariantCulture) : 0;
 
-        if (!hasRampSpeed && !hasMinRampMultiplier && !hasMaxRampMultiplier && !hasMaxDeltaPerTick)
+        bool hasHealAmount = action.TryGetValue("HEALAMOUNT", out tempValue);
+        int healAmount = hasHealAmount ? int.Parse(tempValue, CultureInfo.InvariantCulture) : 20;
+
+        if (!hasRampSpeed && !hasMinRampMultiplier && !hasMaxRampMultiplier && !hasMaxDeltaPerTick && !hasHealAmount)
         {
-            Debug.LogWarning("PatternInterface: BREAKAGERAMP called with no recognized keys (RAMPSPEED, MINRAMPMULTIPLIER, MAXRAMPMULTIPLIER, MAXDELTAPERTICK).");
+            Debug.LogWarning("PatternInterface: BREAKAGERAMP called with no recognized keys (RAMPSPEED, MINRAMPMULTIPLIER, MAXRAMPMULTIPLIER, MAXDELTAPERTICK, HEALAMOUNT).");
             return;
         }
 
@@ -507,6 +510,7 @@ public class PatternInterface : MonoBehaviour
             if (hasMinRampMultiplier) breakable.SetMinRampMultiplier(minRampMultiplier);
             if (hasMaxRampMultiplier) breakable.SetMaxRampMultiplier(maxRampMultiplier);
             if (hasMaxDeltaPerTick) breakable.SetMaxDeltaPerTick(maxDeltaPerTick);
+            if (hasHealAmount) breakable.SetHealAmount(healAmount);
         }
     }
 }
