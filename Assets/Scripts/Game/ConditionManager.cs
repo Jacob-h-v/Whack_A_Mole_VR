@@ -122,7 +122,7 @@ public class ConditionManager : MonoBehaviour
                 if (pressureGauge != null) pressureGauge.SetActive(true);
                 if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f);
                 conditionManagerBreakageEnabled = true;
-                materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
+                materialColor = new Color(231f/255f, 213f/255f, 66f/255f, 210f/255f);
                 break;
             default:
                 if (pressureGauge != null) pressureGauge.SetActive(true);

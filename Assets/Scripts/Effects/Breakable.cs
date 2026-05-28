@@ -291,12 +291,12 @@ public class Breakable : MonoBehaviour
                 }
             }
 
-                // // Check if the object should break
-                // if (objectIntactness <= 0)
-                // {
-                //     BreakObject();
-                //     yield break; // Exit the coroutine after breaking the object
-                // }
+                // Check if the object should break
+                if (objectIntactness <= 0)
+                {
+                    BreakObject();
+                    yield break; // Exit the coroutine after breaking the object
+                }
                 yield return new WaitForSeconds(1.0f); // Adjust the frequency of intactness updates as needed
         }
             
