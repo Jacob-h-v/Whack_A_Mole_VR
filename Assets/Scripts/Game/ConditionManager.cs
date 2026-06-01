@@ -96,7 +96,7 @@ public class ConditionManager : MonoBehaviour
         {
             case 0: // Baseline Condition
                 if (pressureGauge != null) pressureGauge.SetActive(false);
-                if (emgPointerRight != null) emgPointerRight.SetDwellTime(0.5f); // Fast dwell time for Baseline
+                if (emgPointerRight != null) emgPointerRight.SetDwellTime(9.5f); // Fast dwell time for Baseline
                 conditionManagerBreakageEnabled = false;
                 materialColor = new Color(187f/255f, 226f/255f, 206f/255f, 210f/255f);
                 break;
