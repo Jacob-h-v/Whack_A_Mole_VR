@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Data.SqlTypes;
 using UnityEngine;
 
 
@@ -50,7 +51,7 @@ public class Breakable : MonoBehaviour
     private float spawnGraceEndTime = 0f;
     private bool enableBreakage = false;
     private int healAmount = 20;
-
+    private bool isWinnable = true;
     private enum GraspState
     {
         None,
@@ -168,6 +169,20 @@ public class Breakable : MonoBehaviour
         }
     }
 
+    public void IsMoleWinnable(bool winnable)
+    {
+        if (winnable)
+        {
+            isWinnable = true;
+            healAmount = 20;
+        }
+        else
+        {
+            isWinnable = false;
+            healAmount = 0;
+        }
+    }
+
     private void ToggleAuras(bool good, bool low, bool high)
     {
         if (!enableAuras) return;
@@ -274,7 +289,15 @@ public class Breakable : MonoBehaviour
             int adjustedDelta = Mathf.RoundToInt(adjustmentPerTick * rampMultiplier);
 
             // clamp extreme spikes
-            adjustedDelta = Mathf.Clamp(adjustedDelta, -maxDeltaPerTick, maxDeltaPerTick);
+            if (!isWinnable)
+            {
+                adjustedDelta = -15;
+            }
+            else
+            {
+                adjustedDelta = Mathf.Clamp(adjustedDelta, -maxDeltaPerTick, maxDeltaPerTick);
+            }
+            
 
             objectIntactness += adjustedDelta;
 

@@ -14,6 +14,7 @@ public class PatternParser
     public enum Paradigm { Time, Progression }
 
     private static Paradigm paradigm;
+    private Breakable breakable;
 
     public Paradigm GetParadigm()
     {
@@ -96,6 +97,24 @@ public class PatternParser
             {
                 moleCount++;
                 SetMoleCount(moleCount);
+            }
+            else if (keyValue[0] == "UNWINNABLE")
+            {
+                // Get reference to Breakable if not already cached
+                if (breakable == null)
+                {
+                    breakable = UnityEngine.Object.FindObjectOfType<Breakable>();
+                }
+                breakable.IsMoleWinnable(false);
+            }
+            else if (keyValue[0] != "UNWINNABLE")
+            {
+                // Get reference to Breakable if not already cached
+                if (breakable == null)
+                {
+                    breakable = UnityEngine.Object.FindObjectOfType<Breakable>();
+                }
+                breakable.IsMoleWinnable(true);
             }
 
             // Add the extracted property to the dictionary
