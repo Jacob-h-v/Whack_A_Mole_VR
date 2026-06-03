@@ -178,12 +178,12 @@ public class PatternInterface : MonoBehaviour
 
                 case "UNWINNABLE":
                     bottleBreaker.ForceBreakage(true);
-                    Debug.Log("PatternInterface set 'force breakage' to true due to UNWINNABLE condition.");
+                    Debug.Log("[BottleBreaker] PatternInterface set 'force breakage' to true due to UNWINNABLE condition.");
                     break;
 
                 case "WINNABLE":
                     bottleBreaker.ForceBreakage(false);
-                    Debug.Log("PatternInterface set 'force breakage' to false due to WINNABLE condition.");
+                    Debug.Log("[BottleBreaker] PatternInterface set 'force breakage' to false due to WINNABLE condition.");
                     break;
 
                 default:
