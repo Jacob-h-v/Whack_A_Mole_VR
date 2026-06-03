@@ -18,6 +18,7 @@ public class PatternInterface : MonoBehaviour
     private ThemeManager themeManager;
     private TactorConnector tactorConnector;
     private ConditionManager conditionManager;
+    private ForceBottleBreakage bottleBreaker;
     private float randVar = 0f;
 
     private Dictionary<int, Mole> targetsList = null;
@@ -75,6 +76,7 @@ public class PatternInterface : MonoBehaviour
         themeManager = FindObjectOfType<ThemeManager>();
         tactorConnector = FindObjectOfType<TactorConnector>();
         conditionManager = FindObjectOfType<ConditionManager>();
+        bottleBreaker = FindObjectOfType<ForceBottleBreakage>();
     }
 
     void Start()
@@ -172,6 +174,14 @@ public class PatternInterface : MonoBehaviour
 
                 case "CONDITION":
                     SetCondition(action);
+                    break;
+
+                case "UNWINNABLE":
+                    bottleBreaker.ForceBreakage(true);
+                    break;
+
+                case "WINNABLE":
+                    bottleBreaker.ForceBreakage(false);
                     break;
 
                 default:

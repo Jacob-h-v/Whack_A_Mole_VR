@@ -51,7 +51,7 @@ public class Breakable : MonoBehaviour
     private float spawnGraceEndTime = 0f;
     private bool enableBreakage = false;
     private int healAmount = 20;
-    private bool isWinnable = true;
+    private ForceBottleBreakage bottleBreaker;
     private enum GraspState
     {
         None,
@@ -86,6 +86,7 @@ public class Breakable : MonoBehaviour
         glassMaterial.SetFloat("_CrackedAmount", 0f);
         UpdateGraspStatus(0f);
         adjustmentCoroutine = StartCoroutine(IntactnessAdjustmentLoop());
+        bottleBreaker = FindObjectOfType<ForceBottleBreakage>();
     }
 
     void Update()
@@ -169,18 +170,9 @@ public class Breakable : MonoBehaviour
         }
     }
 
-    public void IsMoleWinnable(bool winnable)
+    public bool IsForceBreakEnabled()
     {
-        if (winnable)
-        {
-            isWinnable = true;
-            healAmount = 20;
-        }
-        else
-        {
-            isWinnable = false;
-            healAmount = 0;
-        }
+        return bottleBreaker.IsForceBreakageEnabled();
     }
 
     private void ToggleAuras(bool good, bool low, bool high)
@@ -289,7 +281,7 @@ public class Breakable : MonoBehaviour
             int adjustedDelta = Mathf.RoundToInt(adjustmentPerTick * rampMultiplier);
 
             // clamp extreme spikes
-            if (!isWinnable)
+            if (IsForceBreakEnabled())
             {
                 adjustedDelta = -15;
             }
