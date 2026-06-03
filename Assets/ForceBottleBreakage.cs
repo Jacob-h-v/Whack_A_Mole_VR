@@ -15,10 +15,12 @@ public class ForceBottleBreakage : MonoBehaviour
     public void ForceBreakage(bool value)
     {
         forceBreakage = value;
+        Debug.Log("Force breakage set to: " + forceBreakage);
     }
 
     public bool IsForceBreakageEnabled()
     {
+        Debug.Log("Breakage Script checked 'force breakage' state and got: " + forceBreakage);
         return forceBreakage;
     }
 }

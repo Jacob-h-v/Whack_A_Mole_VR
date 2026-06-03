@@ -290,8 +290,9 @@ public class Breakable : MonoBehaviour
                 adjustedDelta = Mathf.Clamp(adjustedDelta, -maxDeltaPerTick, maxDeltaPerTick);
             }
             
-
+            Debug.Log("Adjusting Bottle Health By Amount: " + adjustedDelta);
             objectIntactness += adjustedDelta;
+            Debug.Log("New Bottle Health: " + objectIntactness);
 
             objectIntactness = Mathf.Clamp(objectIntactness, -100, 100);
 
