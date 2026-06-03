@@ -67,11 +67,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Operational Zones:\r\n\r\n1) Blue Sector (0%\u201320%): Insufficient input
-    intensity.\r\n\n2) Green Sector (20%\u201360%): Target Anchor Zone. Stabilise
+    intensity.\r\n\n2) White Sector (20%\u201360%): Target Anchor Zone. Stabilise
     input within this pre-filled arc for optimal results.\r\n\n3) Red Sector (60%\u2013100%):
     Excessive input intensity.\n\nReal-Time Indicator: The gauge needle reflects
     current sensor data.\n\nObjective: Steer and maintain the needle within the static
-    green anchor zone to ensure object stability."
+    white anchor zone to ensure object stability."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -786,7 +786,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185bad61d023e7244800558bff429cf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  continueButton: {fileID: 0}
+  continueKey: 32
 --- !u!1 &8836604569865388565
 GameObject:
   m_ObjectHideFlags: 0
