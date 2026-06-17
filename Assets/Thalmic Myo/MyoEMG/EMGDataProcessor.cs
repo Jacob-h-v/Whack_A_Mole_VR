@@ -8,8 +8,8 @@ public class EMGDataProcessor : MonoBehaviour
     [SerializeField] private int smoothingWindowSize = 250;
 
     [SerializeField] private int[] rawEMGData = new int[8];
-    [SerializeField] private float rawAbsAverage;
-    [SerializeField] private float smoothedAbsAverage;
+    [SerializeField] public float rawAbsAverage;
+    [SerializeField] public float smoothedAbsAverage;
 
     private Queue<int[]> rawEMGDataBuffer = new Queue<int[]>();
     private Queue<float> rawAbsAverageBuffer = new Queue<float>();

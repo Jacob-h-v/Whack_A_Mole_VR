@@ -381,11 +381,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   needleTransform: {fileID: 2777230636858864076}
-  handModel: {fileID: 8085861608804193088}
-  emgPointer: {fileID: 0}
+  EMGDataProcessor: {fileID: 0}
   maxMVCAngle: 135
   zeroMVCAngle: -135
   localOffset: {x: 0.1, y: 0.05, z: 0.2}
+  MVCValue: 100
 --- !u!4 &2777230636858864076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5460073385026213122, guid: 8a104245542f3ee48989b06a158c7718,

@@ -5,11 +5,11 @@ using UnityEngine;
 public class PressureGaugeAnimator : MonoBehaviour
 {
     [SerializeField] private Transform needleTransform;
-    [SerializeField] private EMGPointer emgPointer;
+    [SerializeField] private EMGDataProcessor EMGDataProcessor;
     [SerializeField] private float maxMVCAngle = 180.0f;
     [SerializeField] private float zeroMVCAngle = 0.0f;
     [SerializeField] private Vector3 localOffset = new Vector3(0.1f, 0.05f, 0.2f);
-    [SerializeField][Range(1.0f, 500.0f)] private float MVCValue = 100.0f;
+    [SerializeField][Range(5.0f, 100.0f)] private float MVCValue = 30.0f;
 
     private float mvc = 100.0f;
     private float currentPercentMVC = 0.0f;
@@ -18,7 +18,7 @@ public class PressureGaugeAnimator : MonoBehaviour
 
     void Awake()
     {
-        emgPointer = FindObjectOfType<EMGPointer>();
+        EMGDataProcessor = FindObjectOfType<EMGDataProcessor>();
     }
 
     // Update is called once per frame
@@ -86,7 +86,7 @@ public class PressureGaugeAnimator : MonoBehaviour
     {
         // float maxEMG = emgPointer != null ? emgPointer.GetMaxEMG() : 100f;
         float maxEMG = MVCValue;
-        float currentMVCPercent = emgPointer != null ? emgPointer.GetCurrentMvcPercent() : 0f;
+        float currentMVCPercent = (EMGDataProcessor.smoothedAbsAverage/maxEMG)*100f;
 
         mvc = maxEMG;
         currentPercentMVC = currentMVCPercent;
